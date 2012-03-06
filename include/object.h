@@ -3,14 +3,15 @@
 #define _RAY_OBJECT_H
 
 #include <stdbool.h>
+#include <stdlib.h>
 
 #define OBJECT_HEADER \
-    struct func_table func; \
-    Material mat;
+    struct object_func_table func; \
+    Material* mat;
 
 struct Object_struct;
 
-struct func_table {
+struct object_func_table {
     void (*print)(const struct Object_struct* obj);
     bool (*ray_intersect)(const struct Object_struct* obj, const Ray* ray, Ray* normal);
 };
@@ -20,6 +21,8 @@ struct Object_struct {
 };
 
 typedef struct Object_struct Object;
+
+void Object_set_material(Object* obj, Material* mat);
 
 #define Object_print(o) (o)->func.print((Object*)o)
 #define Object_ray_intersect(o, ray, norm) (o)->func.ray_intersect((Object*)o, ray, norm)

@@ -14,7 +14,7 @@ Sphere* Sphere_new(double x, double y, double z, double radius) {
     s->r = radius;
     s->func.print = Sphere_print;
     s->func.ray_intersect = Sphere_ray_intersect;
-    s->mat.color = (Color){127, 127, 127};
+    s->mat = Material_default();
     return s;
 }
 

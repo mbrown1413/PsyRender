@@ -106,7 +106,7 @@ Color trace_ray(const Ray* ray, Scene* scene, unsigned int depth) {
 
     }
     if (closest_obj) {
-        return closest_obj->mat.color;
+        return Material_ray_hit(closest_obj->mat, &closest_norm, ray, depth+1);
     } else {
         return (Color) {0, 0, 0};
     }

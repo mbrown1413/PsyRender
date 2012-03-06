@@ -7,9 +7,9 @@
 Plane* Plane_new(double z) {
     Plane* p = (Plane*) malloc(sizeof(Plane));
     p->z = z;
-    p->mat.color = (Color){0, 255, 0};
     p->func.print = Plane_print;
     p->func.ray_intersect = Plane_ray_intersect;
+    p->mat = Material_default();
     return p;
 }
 void Plane_print(const Object* obj) {

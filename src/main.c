@@ -5,10 +5,19 @@
 #include "ray.h"
 
 int main() {
+    Material_Basic* mat;
 
     Scene* scene = Scene_new();
-    Scene_add_object(scene, (Object*) Sphere_new(0, 5, -2, 1));
-    Scene_add_object(scene, (Object*) Plane_new(-2));
+
+    Sphere* sphere = Sphere_new(0, 5, -2, 1);
+    mat = (Material_Basic*) sphere->mat;
+    mat->color = (Color) {127, 127, 127};
+    Scene_add_object(scene, (Object*) sphere);
+
+    Plane* plane = Plane_new(-2);
+    mat = (Material_Basic*) sphere->mat;
+    mat->color = (Color) {0, 255, 0};
+    Scene_add_object(scene, (Object*) plane);
 
     Camera* camera = Camera_new();
     camera->width = 900;
