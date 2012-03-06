@@ -1,5 +1,6 @@
 
 #include <stdlib.h>
+#include <math.h>
 
 #include <png.h>
 
@@ -61,7 +62,6 @@ int render(Camera* camera, Scene* scene, char* filename) {
     unsigned char* row = (unsigned char*) malloc(camera->width*3*sizeof(unsigned char));
     for (int y=0; y<camera->height; y++) {
 
-        printf("Ray: %f, %f, %f,   %f, %f, %f\n", r.ox, r.oy, r.oz, r.dx, r.dy, r.dz);
         r.dx = -3;
         for (int x=0; x<camera->width*3; x+=3) {
             r.dx += dx.x;
@@ -88,14 +88,26 @@ int render(Camera* camera, Scene* scene, char* filename) {
 }
 
 Color trace_ray(const Ray* ray, Scene* scene, unsigned int depth) {
-    Ray norm;
+    Ray norm, closest_norm;
+    double dist, closest_dist = INFINITY;
     List_start_iteration(scene->objects);
     Object* obj;
+    Object* closest_obj=NULL;
     while ((obj = (Object*) List_next(scene->objects))) {
+
         if (Object_ray_intersect(obj, ray, &norm)) {
-            //printf("Return deTrue, %d, %d, %d\n", obj->mat.color.r, obj->mat.color.g, obj->mat.color.b);
-            return obj->mat.color;
+            dist = DIST_SQ(norm.ox, norm.oy, norm.oz, ray->ox, ray->oy, ray->oz);
+            if (dist < closest_dist) {
+                closest_dist = dist;
+                closest_norm = norm;
+                closest_obj = obj;
+            }
         }
+
     }
-    return (Color) {0, 0, 0};
+    if (closest_obj) {
+        return closest_obj->mat.color;
+    } else {
+        return (Color) {0, 0, 0};
+    }
 }

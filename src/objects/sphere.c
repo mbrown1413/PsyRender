@@ -29,9 +29,9 @@ bool Sphere_ray_intersect(const Object* obj, const Ray* r, Ray* normal) {
     const Sphere* s = (Sphere*) obj;
 
     // Convert ray into object space
-    double r_x = s->x - r->ox;
-    double r_y = s->y - r->oy;
-    double r_z = s->z - r->oz;
+    double r_x = r->ox - s->x;
+    double r_y = r->oy - s->y;
+    double r_z = r->oz - s->z;
 
     double a = DOT(r->dx, r->dy, r->dz, r->dx, r->dy, r->dz);
     double b = 2 * DOT(r_x, r_y, r_z, r->dx, r->dy, r->dz);
@@ -44,7 +44,15 @@ bool Sphere_ray_intersect(const Object* obj, const Ray* r, Ray* normal) {
 
     double t1 = ( -b + sqrt(det) ) / (2*a);
     double t2 = ( -b - sqrt(det) ) / (2*a);
-    double t = t1<t2 ? t1 : t2;
+    double t;
+    if (t1 <= 0) {
+        t = t2;
+    } else if (t2 <= 0) {
+        t = t1;
+    } else {
+        t = t1<t2 ? t1 : t2;
+    }
+    if (t <= 0) return false;
 
     // Intersect point
     normal->ox = r->ox + t*r->dx;

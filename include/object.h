@@ -26,5 +26,6 @@ typedef struct Object_struct Object;
 #define Object_free(o) free(o)
 
 #include "objects/sphere.h"
+#include "objects/plane.h"
 
 #endif
