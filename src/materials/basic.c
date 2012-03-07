@@ -28,9 +28,9 @@ Color Material_Basic_ray_hit(const Scene* scene, const Material* mat, const Ray*
 
         Color reflected_color = trace_ray(&reflected, scene, depth);
         return (Color) {
-            m->color.r + reflected_color.r,
-            m->color.g + reflected_color.g,
-            m->color.b + reflected_color.b
+            (1-m->reflectivity)*m->color.r + m->reflectivity*reflected_color.r,
+            (1-m->reflectivity)*m->color.g + m->reflectivity*reflected_color.g,
+            (1-m->reflectivity)*m->color.b + m->reflectivity*reflected_color.b
         };
 
     }
