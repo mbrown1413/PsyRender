@@ -12,6 +12,7 @@ Plane* Plane_new(double z) {
     p->mat = Material_default();
     return p;
 }
+
 void Plane_print(const Object* obj) {
 }
 

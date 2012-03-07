@@ -20,11 +20,16 @@ typedef struct {
 #define DOT(x1,y1,z1, x2,y2,z2) ( (x1)*(x2) + (y1)*(y2) + (z1)*(z2) )
 #define DIST_SQ(x1,y1,z1, x2,y2,z2) ( ((x1)-(x2))*((x1)-(x2)) + ((y1)-(y2))*((y1)-(y2)) + ((z1)-(z2))*((z1)-(z2)) )
 
-#include "linked_list.h"
+struct Object_struct;
+typedef struct Object_struct Object;
 
+struct Material_struct;
+typedef struct Material_struct Material;
+
+#include "linked_list.h"
+#include "scene.h"
 #include "material.h"
 #include "object.h"
-#include "scene.h"
 #include "camera.h"
 #include "render.h"
 

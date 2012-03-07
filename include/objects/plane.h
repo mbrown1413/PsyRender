@@ -2,8 +2,6 @@
 #ifndef _RAY_OBJ_INFCHECKER_H
 #define _RAY_OBJ_INFCHECKER_H
 
-#include "ray.h"
-
 typedef struct {
     OBJECT_HEADER
     double z;

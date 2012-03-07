@@ -2,8 +2,6 @@
 #ifndef _RAY_OBJ_SPHERE_H
 #define _RAY_OBJ_SPHERE_H
 
-#include "ray.h"
-
 typedef struct {
     OBJECT_HEADER
     double x, y, z, r;

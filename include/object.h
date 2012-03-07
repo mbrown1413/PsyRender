@@ -9,8 +9,6 @@
     struct object_func_table func; \
     Material* mat;
 
-struct Object_struct;
-
 struct object_func_table {
     void (*print)(const struct Object_struct* obj);
     bool (*ray_intersect)(const struct Object_struct* obj, const Ray* ray, Ray* normal);
@@ -19,8 +17,6 @@ struct object_func_table {
 struct Object_struct {
     OBJECT_HEADER
 };
-
-typedef struct Object_struct Object;
 
 void Object_set_material(Object* obj, Material* mat);
 

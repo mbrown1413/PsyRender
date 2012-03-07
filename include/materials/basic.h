@@ -8,7 +8,7 @@ typedef struct {
     double reflectivity;
 } Material_Basic;
 
-Material_Basic* Material_Basic_new();
-Color Material_Basic_ray_hit(const Material* mat, Ray* ray, const Ray* norm, unsigned int depth);
+Material* Material_Basic_new();
+Color Material_Basic_ray_hit(const Scene* scene, const Material* mat, const Ray* ray, Ray* norm, unsigned int depth);
 
 #endif

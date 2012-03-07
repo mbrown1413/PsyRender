@@ -28,6 +28,11 @@ void Sphere_print(const Object* obj) {
 bool Sphere_ray_intersect(const Object* obj, const Ray* r, Ray* normal) {
     const Sphere* s = (Sphere*) obj;
 
+    //TODO
+    if (fabs(sqrt(DIST_SQ(r->ox, r->oy, r->oz, s->x, s->y, s->z)) - s->r) < 0.1) {
+        return false;
+    }
+
     // Convert ray into object space
     double r_x = r->ox - s->x;
     double r_y = r->oy - s->y;
@@ -52,7 +57,9 @@ bool Sphere_ray_intersect(const Object* obj, const Ray* r, Ray* normal) {
     } else {
         t = t1<t2 ? t1 : t2;
     }
-    if (t <= 0) return false;
+    if (t <= 0) {
+        return false;
+    }
 
     // Intersect point
     normal->ox = r->ox + t*r->dx;

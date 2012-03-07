@@ -87,8 +87,13 @@ int render(Camera* camera, Scene* scene, char* filename) {
     return 0;
 }
 
-Color trace_ray(const Ray* ray, Scene* scene, unsigned int depth) {
+Color trace_ray(const Ray* ray, const Scene* scene, unsigned int depth) {
     Ray norm, closest_norm;
+
+    if (depth > 100) {
+        return (Color) {0, 0, 0};
+    }
+
     double dist, closest_dist = INFINITY;
     List_start_iteration(scene->objects);
     Object* obj;
@@ -106,7 +111,7 @@ Color trace_ray(const Ray* ray, Scene* scene, unsigned int depth) {
 
     }
     if (closest_obj) {
-        return Material_ray_hit(closest_obj->mat, &closest_norm, ray, depth+1);
+        return Material_ray_hit(scene, closest_obj->mat, ray, &closest_norm, depth+1);
     } else {
         return (Color) {0, 0, 0};
     }
