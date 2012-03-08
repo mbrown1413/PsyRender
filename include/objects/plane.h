@@ -9,6 +9,10 @@ typedef struct {
 
 Plane* Plane_new(double z);
 void Plane_print(const Object* obj);
-bool Plane_ray_intersect(const Object* obj, const Ray* r, Ray* normal);
+bool Plane_ray_intersect(
+        const Object* obj,
+        const Ray* r,
+        Point* intersect,
+        Vector* normal);
 
 #endif

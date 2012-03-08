@@ -1,7 +1,10 @@
 
 INCLUDE_DIR=include/
 
-OBJECT_SRC=$(wildcard src/*.c src/objects/*.c src/materials/*.c)
+PROGRAM_SRC=$(wildcard src/*.c)
+PROGRAM_EXEC=$(patsubst src/%.c, bin/%, $(PROGRAM_SRC))
+
+OBJECT_SRC=$(wildcard lib/*.c lib/objects/*.c lib/materials/*.c)
 OBJECTS=$(patsubst %.c, %.o, $(OBJECT_SRC))
 
 INCLUDES=$(wildcard include/*.h include/objects/*.h include/materials/*.h)
@@ -12,13 +15,17 @@ CFLAGS+=-g
 
 LDFLAGS+=$(shell pkg-config libpng12 --libs)
 
-all: main
-
-main: $(OBJECTS) $(INCLUDES) Makefile
-	$(CC) $(CFLAGS) $(LDFLAGS) -Wno-missing-prototypes $(OBJECTS) -o $@
+all: $(PROGRAM_EXEC)
 
 %.o: %.c $(INCLUDES) Makefile
 	$(CC) $(CFLAGS) -c $< -o $@
 
+bin/%: src/%.c $(OBJECTS) $(INCLUDES) bin/
+	$(CC) $(CFLAGS) $(LDFLAGS) -Wno-missing-prototypes $(OBJECTS) $< -o $@
+
+bin/:
+	mkdir bin
+
 clean:
-	-rm src/*.o src/objects/*.o main
+	-rm $(OBJECTS)
+	-rm $(PROGRAM_EXEC)

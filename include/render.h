@@ -4,6 +4,6 @@
 
 int render(Camera* camera, Scene* scene, char* filename);
 Color trace_ray(const Scene* scene, const Ray* r, unsigned int depth);
-Object* ray_intersect(const Scene* scene, const Ray* r, Ray* intersect_norm);
+Object* ray_intersect(const Scene* scene, const Ray* r, Point* intersect, Vector* norm);
 
 #endif

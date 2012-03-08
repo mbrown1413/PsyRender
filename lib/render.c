@@ -88,28 +88,20 @@ int render(Camera* camera, Scene* scene, char* filename) {
 }
 
 Color trace_ray(const Scene* scene, const Ray* r, unsigned int depth) {
-    Ray norm;
+    Point intersect;
+    Vector norm;
     Object* closest_obj;
 
-    closest_obj = ray_intersect(scene, r, &norm);
+    closest_obj = ray_intersect(scene, r, &intersect, &norm);
 
     if (closest_obj) {
 
         Material* mat = closest_obj->mat;
-        Color mat_color = Material_ray_hit(scene, mat, r, &norm, depth+1);
+        Color mat_color = Material_ray_hit(scene, mat, r, &intersect, &norm, depth+1);
 
         if (mat->reflectivity) {
             Ray reflected;
-            reflected.ox = norm.ox;
-            reflected.oy = norm.oy;
-            reflected.oz = norm.oz;
-            double dot_norm_ray = DOT(norm.dx, norm.dy, norm.dz, r->dx, r->dy, r->dz);
-            double norm_mag_squared = norm.dx*norm.dx + norm.dy*norm.dy + norm.dz*norm.dz;
-            double double_proj_mag = 2 * dot_norm_ray / norm_mag_squared;
-            reflected.dx = r->dx - double_proj_mag*norm.dx;
-            reflected.dy = r->dy - double_proj_mag*norm.dy;
-            reflected.dz = r->dz - double_proj_mag*norm.dz;
-
+            ray_reflect(r, &intersect, &norm, &reflected);
             Color reflected_color = trace_ray(scene, &reflected, depth);
             return (Color) {
                 (1-mat->reflectivity)*mat_color.r + mat->reflectivity*reflected_color.r,
@@ -125,25 +117,28 @@ Color trace_ray(const Scene* scene, const Ray* r, unsigned int depth) {
     }
 }
 
-Object* ray_intersect(const Scene* scene, const Ray* r, Ray* intersect_norm) {
-    Ray norm, closest_norm;
+Object* ray_intersect(const Scene* scene, const Ray* r, Point* intersect, Vector* norm) {
+    Point obj_intersect, closest_intersect;
+    Vector obj_norm, closest_norm;
+    double dist, closest_dist = INFINITY;
     Object* obj;
     Object* closest_obj=NULL;
-    double dist, closest_dist = INFINITY;
 
     List_start_iteration(scene->objects);
     while ((obj = (Object*) List_next(scene->objects))) {
 
-        if (Object_ray_intersect(obj, r, &norm)) {
-            dist = DIST_SQ(norm.ox, norm.oy, norm.oz, r->ox, r->oy, r->oz);
+        if (Object_ray_intersect(obj, r, &obj_intersect, &obj_norm)) {
+            dist = DIST_SQ(obj_intersect.x, obj_intersect.y, obj_intersect.z, r->ox, r->oy, r->oz);
             if (dist < closest_dist) {
                 closest_dist = dist;
-                closest_norm = norm;
+                closest_norm = obj_norm;
+                closest_intersect = obj_intersect;
                 closest_obj = obj;
             }
         }
     }
 
-    *intersect_norm = closest_norm;
+    *intersect = closest_intersect;
+    *norm = closest_norm;
     return closest_obj;
 }

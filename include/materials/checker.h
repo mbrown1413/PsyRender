@@ -8,6 +8,12 @@ typedef struct {
 } Material_Checker;
 
 Material* Material_Checker_new(unsigned int scale);
-Color Material_Checker_ray_hit(const Scene* scene, const Material* mat, const Ray* ray, Ray* norm, unsigned int depth);
+Color Material_Checker_ray_hit(
+        const Scene* scene,
+        const Material* mat,
+        const Ray* ray,
+        Point* intersect,
+        Vector* norm,
+        unsigned int depth);
 
 #endif

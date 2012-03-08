@@ -9,6 +9,10 @@ typedef struct {
 
 Sphere* Sphere_new(double x, double y, double z, double radius);
 void Sphere_print(const Object* obj);
-bool Sphere_ray_intersect(const Object* obj, const Ray* r, Ray* normal);
+bool Sphere_ray_intersect(
+        const Object* obj,
+        const Ray* r,
+        Point* intersect,
+        Vector* normal);
 
 #endif

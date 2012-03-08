@@ -7,7 +7,12 @@
     double reflectivity;
 
 struct material_func_table {
-    Color (*ray_hit)(const Scene* scene, const struct Material_struct* mat, const Ray* ray, Ray* norm, unsigned int depth);
+    Color (*ray_hit)(const Scene* scene,
+                     const struct Material_struct* mat,
+                     const Ray* ray,
+                     Point* intersect,
+                     Vector* norm,
+                     unsigned int depth);
 };
 
 struct Material_struct {
@@ -16,7 +21,8 @@ struct Material_struct {
 
 Material* Material_new_default();
 
-#define Material_ray_hit(scene, m, ray, norm, depth) (m)->func.ray_hit(scene, (Material*)m, ray, norm, depth)
+#define Material_ray_hit(scene, m, ray, intersect, norm, depth) \
+        (m)->func.ray_hit(scene, (Material*)m, ray, intersect, norm, depth)
 #define Material_free(m) free(m)
 
 #include "materials/solid.h"

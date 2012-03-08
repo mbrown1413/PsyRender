@@ -24,7 +24,12 @@ void Sphere_print(const Object* obj) {
 
 //TODO: Optimize and comment.  Get rid of precision issues as described here:
 //      http://wiki.cgsociety.org/index.php/Ray_Sphere_Intersection
-bool Sphere_ray_intersect(const Object* obj, const Ray* r, Ray* normal) {
+bool Sphere_ray_intersect(
+        const Object* obj,
+        const Ray* r,
+        Point* intersect,
+        Vector* normal) {
+
     const Sphere* s = (Sphere*) obj;
 
     //TODO
@@ -61,14 +66,14 @@ bool Sphere_ray_intersect(const Object* obj, const Ray* r, Ray* normal) {
     }
 
     // Intersect point
-    normal->ox = r->ox + t*r->dx;
-    normal->oy = r->oy + t*r->dy;
-    normal->oz = r->oz + t*r->dz;
+    intersect->x = r->ox + t*r->dx;
+    intersect->y = r->oy + t*r->dy;
+    intersect->z = r->oz + t*r->dz;
 
     // Normal vector
-    normal->dx = s->x - normal->ox;
-    normal->dy = s->y - normal->oy;
-    normal->dz = s->z - normal->oz;
+    normal->x = s->x - intersect->x;
+    normal->y = s->y - intersect->y;
+    normal->z = s->z - intersect->z;
 
     return true;
 }

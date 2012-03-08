@@ -11,12 +11,19 @@ Material* Material_Checker_new(unsigned int scale) {
     return (Material*) m;
 }
 
-Color Material_Checker_ray_hit(const Scene* scene, const Material* mat, const Ray* ray, Ray* norm, unsigned int depth) {
+Color Material_Checker_ray_hit(
+        const Scene* scene,
+        const Material* mat,
+        const Ray* ray,
+        Point* intersect,
+        Vector* norm,
+        unsigned int depth) {
+
     //printf("%f %f %f\n", norm->ox, norm->oy, norm->oz);
     Material_Checker* m = (Material_Checker*) mat;
-    if (( ((int) round(norm->ox)) / m->scale + \
-          ((int) round(norm->oy)) / m->scale + \
-          ((int) round(norm->oz)) / m->scale) % 2) {
+    if (( ((int) round(intersect->x)) / m->scale + \
+          ((int) round(intersect->y)) / m->scale + \
+          ((int) round(intersect->z)) / m->scale) % 2) {
         return (Color) {0, 0, 0};
     } else {
         return (Color) {255, 255, 255};

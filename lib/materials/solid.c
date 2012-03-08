@@ -11,7 +11,14 @@ Material* Material_Basic_new() {
     return (Material*) m;
 }
 
-Color Material_Basic_ray_hit(const Scene* scene, const Material* mat, const Ray* ray, Ray* norm, unsigned int depth) {
+Color Material_Basic_ray_hit(
+        const Scene* scene,
+        const Material* mat,
+        const Ray* ray,
+        Point* intersect,
+        Vector* norm,
+        unsigned int depth) {
+
     Material_Basic* m = (Material_Basic*) mat;
     return m->color;
 }
