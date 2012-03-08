@@ -13,8 +13,8 @@ Material* Material_Basic_new() {
 
 Color Material_Basic_ray_hit(const Scene* scene, const Material* mat, const Ray* ray, Ray* norm, unsigned int depth) {
     Material_Basic* m = (Material_Basic*) mat;
-    if (m->reflectivity) {
 
+    if (m->reflectivity) {
         Ray reflected;
         reflected.ox = norm->ox;
         reflected.oy = norm->oy;
@@ -26,13 +26,13 @@ Color Material_Basic_ray_hit(const Scene* scene, const Material* mat, const Ray*
         reflected.dy = ray->dy - double_proj_mag*norm->dy;
         reflected.dz = ray->dz - double_proj_mag*norm->dz;
 
-        Color reflected_color = trace_ray(&reflected, scene, depth);
+        Color reflected_color = trace_ray(scene, &reflected, depth);
         return (Color) {
             (1-m->reflectivity)*m->color.r + m->reflectivity*reflected_color.r,
             (1-m->reflectivity)*m->color.g + m->reflectivity*reflected_color.g,
             (1-m->reflectivity)*m->color.b + m->reflectivity*reflected_color.b
         };
-
     }
+
     return m->color;
 }

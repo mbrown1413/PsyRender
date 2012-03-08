@@ -67,7 +67,7 @@ int render(Camera* camera, Scene* scene, char* filename) {
             r.dx += dx.x;
             r.dy += dx.y;
             r.dz += dx.z;
-            c = trace_ray(&r, scene, 0);
+            c = trace_ray(scene, &r, 0);
             row[x+0] = c.r;
             row[x+1] = c.g;
             row[x+2] = c.b;
@@ -87,32 +87,38 @@ int render(Camera* camera, Scene* scene, char* filename) {
     return 0;
 }
 
-Color trace_ray(const Ray* ray, const Scene* scene, unsigned int depth) {
-    Ray norm, closest_norm;
+Color trace_ray(const Scene* scene, const Ray* r, unsigned int depth) {
+    Ray intersect_norm;
+    Object* closest_obj;
 
-    if (depth > 100) {
+    closest_obj = ray_intersect(scene, r, &intersect_norm);
+
+    if (closest_obj) {
+        return Material_ray_hit(scene, closest_obj->mat, r, &intersect_norm, depth+1);
+    } else {
         return (Color) {0, 0, 0};
     }
+}
 
-    double dist, closest_dist = INFINITY;
-    List_start_iteration(scene->objects);
+Object* ray_intersect(const Scene* scene, const Ray* r, Ray* intersect_norm) {
+    Ray norm, closest_norm;
     Object* obj;
     Object* closest_obj=NULL;
+    double dist, closest_dist = INFINITY;
+
+    List_start_iteration(scene->objects);
     while ((obj = (Object*) List_next(scene->objects))) {
 
-        if (Object_ray_intersect(obj, ray, &norm)) {
-            dist = DIST_SQ(norm.ox, norm.oy, norm.oz, ray->ox, ray->oy, ray->oz);
+        if (Object_ray_intersect(obj, r, &norm)) {
+            dist = DIST_SQ(norm.ox, norm.oy, norm.oz, r->ox, r->oy, r->oz);
             if (dist < closest_dist) {
                 closest_dist = dist;
                 closest_norm = norm;
                 closest_obj = obj;
             }
         }
+    }
 
-    }
-    if (closest_obj) {
-        return Material_ray_hit(scene, closest_obj->mat, ray, &closest_norm, depth+1);
-    } else {
-        return (Color) {0, 0, 0};
-    }
+    *intersect_norm = closest_norm;
+    return closest_obj;
 }

@@ -7,6 +7,7 @@
 int main() {
     Material_Basic* mat_basic;
     Sphere* sphere;
+    Plane* plane;
 
     Scene* scene = Scene_new();
 
@@ -28,11 +29,7 @@ int main() {
     mat_basic->reflectivity = 0.9;
     Scene_add_object(scene, (Object*) sphere);
 
-    Plane* plane = Plane_new(-2);
-    /*
-    mat_basic = (Material_Basic*) plane->mat_basic;
-    mat_basic->color = (Color) {255, 255, 255};
-    */
+    plane = Plane_new(-2);
     Object_set_material((Object*) plane, Material_Checker_new(2));
     Scene_add_object(scene, (Object*) plane);
 
