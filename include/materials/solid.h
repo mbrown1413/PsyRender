@@ -5,7 +5,6 @@
 typedef struct {
     MATERIAL_HEADER
     Color color;
-    double reflectivity;
 } Material_Basic;
 
 Material* Material_Basic_new();

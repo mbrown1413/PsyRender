@@ -39,6 +39,7 @@ int main() {
 
     render(camera, scene, "output.png");
 
-    //Scene_free(scene);
+    Camera_free(camera);
+    Scene_free(scene);
 
 }

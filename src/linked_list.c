@@ -155,9 +155,14 @@ void* List_next(List* l) {
  * be done by the user.
  */
 void List_free(List* l) {
-    //TODO
-    printf("ERROR: List_free not yet implemented\n");
-    exit(-1);
+    struct ListNode* node = l->head;
+    struct ListNode* next;
+    while (node != NULL) {
+        next = node->next;
+        free(node);
+        node = next;
+    }
+    free(l);
 }
 
 /**
@@ -167,9 +172,9 @@ void List_free(List* l) {
  * Note that this resets the iteration.
  */
 void List_print(List* l) {
+    void* item;
     printf("List:\n");
     List_start_iteration(l);
-    void* item;
     while ((item = List_next(l))) {
         printf("  Data at: %p\n", item);
     }

@@ -7,9 +7,8 @@
 Plane* Plane_new(double z) {
     Plane* p = (Plane*) malloc(sizeof(Plane));
     p->z = z;
-    p->func.print = Plane_print;
     p->func.ray_intersect = Plane_ray_intersect;
-    p->mat = Material_default();
+    p->mat = Material_new_default();
     return p;
 }
 

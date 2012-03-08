@@ -15,7 +15,13 @@ void Scene_add_object(Scene* scene, Object* obj) {
 }
 
 void Scene_free(Scene* s) {
-    //TODO
-    printf("ERROR: Scene_free not yet implemented\n");
-    exit(-1);
+    Object* obj;
+
+    List_start_iteration(s->objects);
+    while ((obj = (Object*) List_next(s->objects))) {
+        Object_free(obj);
+    }
+    List_free(s->objects);
+
+    free(s);
 }

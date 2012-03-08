@@ -6,6 +6,7 @@
 Material* Material_Checker_new(unsigned int scale) {
     Material_Checker* m = (Material_Checker*) malloc(sizeof(Material_Checker));
     m->scale = scale;
+    m->reflectivity = 0;
     m->func.ray_hit = Material_Checker_ray_hit;
     return (Material*) m;
 }

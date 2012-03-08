@@ -88,13 +88,38 @@ int render(Camera* camera, Scene* scene, char* filename) {
 }
 
 Color trace_ray(const Scene* scene, const Ray* r, unsigned int depth) {
-    Ray intersect_norm;
+    Ray norm;
     Object* closest_obj;
 
-    closest_obj = ray_intersect(scene, r, &intersect_norm);
+    closest_obj = ray_intersect(scene, r, &norm);
 
     if (closest_obj) {
-        return Material_ray_hit(scene, closest_obj->mat, r, &intersect_norm, depth+1);
+
+        Material* mat = closest_obj->mat;
+        Color mat_color = Material_ray_hit(scene, mat, r, &norm, depth+1);
+
+        if (mat->reflectivity) {
+            Ray reflected;
+            reflected.ox = norm.ox;
+            reflected.oy = norm.oy;
+            reflected.oz = norm.oz;
+            double dot_norm_ray = DOT(norm.dx, norm.dy, norm.dz, r->dx, r->dy, r->dz);
+            double norm_mag_squared = norm.dx*norm.dx + norm.dy*norm.dy + norm.dz*norm.dz;
+            double double_proj_mag = 2 * dot_norm_ray / norm_mag_squared;
+            reflected.dx = r->dx - double_proj_mag*norm.dx;
+            reflected.dy = r->dy - double_proj_mag*norm.dy;
+            reflected.dz = r->dz - double_proj_mag*norm.dz;
+
+            Color reflected_color = trace_ray(scene, &reflected, depth);
+            return (Color) {
+                (1-mat->reflectivity)*mat_color.r + mat->reflectivity*reflected_color.r,
+                (1-mat->reflectivity)*mat_color.g + mat->reflectivity*reflected_color.g,
+                (1-mat->reflectivity)*mat_color.b + mat->reflectivity*reflected_color.b
+            };
+        }
+
+        return mat_color;
+
     } else {
         return (Color) {0, 0, 0};
     }

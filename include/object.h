@@ -10,7 +10,6 @@
     Material* mat;
 
 struct object_func_table {
-    void (*print)(const struct Object_struct* obj);
     bool (*ray_intersect)(const struct Object_struct* obj, const Ray* ray, Ray* normal);
 };
 
@@ -19,10 +18,9 @@ struct Object_struct {
 };
 
 void Object_set_material(Object* obj, Material* mat);
+void Object_free(Object* obj);
 
-#define Object_print(o) (o)->func.print((Object*)o)
 #define Object_ray_intersect(o, ray, norm) (o)->func.ray_intersect((Object*)o, ray, norm)
-#define Object_free(o) free(o)
 
 #include "objects/sphere.h"
 #include "objects/plane.h"

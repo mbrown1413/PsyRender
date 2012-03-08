@@ -12,9 +12,8 @@ Sphere* Sphere_new(double x, double y, double z, double radius) {
     s->y = y;
     s->z = z;
     s->r = radius;
-    s->func.print = Sphere_print;
     s->func.ray_intersect = Sphere_ray_intersect;
-    s->mat = Material_default();
+    s->mat = Material_new_default();
     return s;
 }
 
