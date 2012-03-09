@@ -42,7 +42,7 @@ void Camera_Basic_render(const Scene* scene, const Camera* _cam, Canvas* canvas)
     ray.dz = cam->forward.z + (-1*delta_x.z * cam->image_width/2.0) + (-delta_y.z * cam->image_height/2.0);
 
     for (int y=0; y<cam->image_height; y++) {
-        row = Canvas_get_next_row(canvas);
+        row = Canvas_get_next_row(canvas, (Camera*)cam, y);
         for (int x=0; x<cam->image_width; x++) {
             row[x] = trace_ray(scene, &ray, 0);
 

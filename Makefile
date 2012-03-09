@@ -23,7 +23,7 @@ all: $(PROGRAM_EXEC)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 bin/%: src/%.c $(LIB_OBJECTS) $(INCLUDES) bin/
-	$(CC) $(CFLAGS) $(LDFLAGS) -Wno-missing-prototypes $(LIB_OBJECTS) $< -o $@
+	$(CC) $(CFLAGS) $(LDFLAGS) $(shell cat $(<:%.c=%.flags) 2>/dev/null) -Wno-missing-prototypes $(LIB_OBJECTS) $< -o $@
 
 bin/:
 	-mkdir bin

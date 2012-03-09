@@ -16,6 +16,7 @@ Canvas* Canvas_Png_new(const char* filename) {
     canvas->func.get_next_row = Canvas_Png_get_next_row;
     canvas->func.finish_row = Canvas_Png_finish_row;
     canvas->func.finish = Canvas_Png_finish;
+    canvas->func.free = Canvas_Png_free;
     return (Canvas*) canvas;
 }
 
@@ -69,7 +70,7 @@ bool Canvas_Png_init(Canvas* canvas, const Camera* cam) {
     return true;
 }
 
-Color* Canvas_Png_get_next_row(Canvas* canvas) {
+Color* Canvas_Png_get_next_row(Canvas* canvas, const Camera* cam, unsigned int row) {
     Canvas_Png* png_canvas = (Canvas_Png*) canvas;
     return png_canvas->row;
 }
@@ -81,8 +82,20 @@ void Canvas_Png_finish_row(Canvas* canvas, Color* row) {
 
 void Canvas_Png_finish(Canvas* canvas) {
     Canvas_Png* png_canvas = (Canvas_Png*) canvas;
-    free(png_canvas->row);
+    if (png_canvas->row) {
+        free(png_canvas->row);
+        png_canvas->row = NULL;
+    }
     png_write_end(png_canvas->write_ptr, png_canvas->info_ptr);
     png_destroy_write_struct(&png_canvas->write_ptr, &png_canvas->info_ptr);
     fclose(png_canvas->fp);
+}
+
+void Canvas_Png_free(Canvas* canvas) {
+    Canvas_Png* png_canvas = (Canvas_Png*) canvas;
+    if (png_canvas->row) {
+        free(png_canvas->row);
+        png_canvas->row = NULL;
+    }
+    free(canvas);
 }

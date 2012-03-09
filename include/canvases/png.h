@@ -16,8 +16,9 @@ typedef struct {
 
 Canvas* Canvas_Png_new(const char* filename);
 bool Canvas_Png_init(Canvas* canvas, const Camera* cam);
-Color* Canvas_Png_get_next_row(Canvas* canvas);
+Color* Canvas_Png_get_next_row(Canvas* canvas, const Camera* cam, unsigned int row);
 void Canvas_Png_finish_row(Canvas* canvas, Color* row);
 void Canvas_Png_finish(Canvas* canvas);
+void Canvas_Png_free(Canvas* canvas);
 
 #endif
