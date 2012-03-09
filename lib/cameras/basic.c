@@ -59,3 +59,31 @@ void Camera_Basic_render(const Scene* scene, const Camera* _cam, Canvas* canvas)
 
     }
 }
+
+void Camera_Basic_zoom(Camera* _cam, unsigned int x, unsigned int y, double zoom_factor) {
+    Camera_Basic* cam = (Camera_Basic*) _cam;
+    Vector left;
+    Vector delta_x, delta_y;  // Amount ray will change when moving one x or y in the image
+
+    double right_pan = (x - cam->image_width/2.0) / (cam->image_width/2.0);
+    double down_pan = (y - cam->image_width/2.0) / (cam->image_height/2.0);
+
+    vec_cross(&left, &cam->up, &cam->forward);
+    vec_normalize(&left);
+
+    vec_normalize(&cam->forward);
+
+    vec_scalar_mult(&delta_x, &left, -2*tan(cam->fov_x/2) / cam->image_width);
+    vec_scalar_mult(&delta_y, &cam->up, -2*tan(cam->fov_y/2) / cam->image_height);
+
+    // Point camera towards x, y (image coordinates)
+    cam->forward.x = cam->forward.x + right_pan*(delta_x.x * cam->image_width/2.0) + down_pan*(delta_y.x * cam->image_height/2.0);
+    cam->forward.y = cam->forward.y + right_pan*(delta_x.y * cam->image_width/2.0) + down_pan*(delta_y.y * cam->image_height/2.0);
+    cam->forward.z = cam->forward.z + right_pan*(delta_x.z * cam->image_width/2.0) + down_pan*(delta_y.z * cam->image_height/2.0);
+
+    cam->fov_x /= zoom_factor;
+    cam->fov_y /= zoom_factor;
+
+    if (cam->fov_x >= PI) cam->fov_x = PI;
+    if (cam->fov_y >= PI) cam->fov_y = PI;
+}

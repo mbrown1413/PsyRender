@@ -9,13 +9,57 @@
 
 #include "ray.h"
 
-void horizontal_flip(Color* image, unsigned int width, unsigned int height);
+#define ZOOM_FACTOR 3
 
 Canvas* canvas;
-Camera* camera;
+Camera* camera = NULL;
 Scene* scene;
 
-void reshape(int w, int h) {
+void reset_view() {
+    if (camera) {
+        Camera_free(camera);
+    }
+    camera = (Camera*) Camera_Basic_new(
+        800, 800,
+        (Point) {0, 0, 0}
+    );
+
+}
+
+void horizontal_flip(Color* image, unsigned int width, unsigned int height) {
+    size_t widthstep = sizeof(Color) * width;
+    Color* tmp = (Color*) malloc(widthstep);
+    for (int y=0; y<height/2; y++) {
+        Color* row1 = &image[y*width];
+        Color* row2 = &image[(height-y-1)*width];
+        memcpy(tmp, row1, widthstep);
+        memcpy(row1, row2, widthstep);
+        memcpy(row2, tmp, widthstep);
+    }
+    free(tmp);
+}
+
+void on_mouse(int button, int state, int x, int y) {
+    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+        Camera_Basic_zoom(camera, x, y, ZOOM_FACTOR);
+        glutPostRedisplay();
+    } else if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) {
+        Camera_Basic_zoom(camera, x, y, 1.0/ZOOM_FACTOR);
+        glutPostRedisplay();
+    } else if (button == GLUT_MIDDLE_BUTTON && state == GLUT_DOWN) {
+        Camera_Basic_zoom(camera, x, y, 1);
+        glutPostRedisplay();
+    }
+}
+
+void on_key_down(unsigned char key, int x, int y) {
+    if (key == 'r' || key == 'R') {
+        reset_view();
+        glutPostRedisplay();
+    }
+}
+
+void on_reshape(int w, int h) {
     camera->image_width = w;
     camera->image_height = h;
     glutPostRedisplay();
@@ -34,19 +78,6 @@ void draw() {
     );
     glFlush();
     glutSwapBuffers();
-}
-
-void horizontal_flip(Color* image, unsigned int width, unsigned int height) {
-    size_t widthstep = sizeof(Color) * width;
-    Color* tmp = (Color*) malloc(widthstep);
-    for (int y=0; y<height/2; y++) {
-        Color* row1 = &image[y*width];
-        Color* row2 = &image[(height-y-1)*width];
-        memcpy(tmp, row1, widthstep);
-        memcpy(row1, row2, widthstep);
-        memcpy(row2, tmp, widthstep);
-    }
-    free(tmp);
 }
 
 int main(int argc, char** argv) {
@@ -78,13 +109,16 @@ int main(int argc, char** argv) {
     Object_set_material((Object*) plane, Material_Checker_new(2));
     Scene_add_object(scene, (Object*) plane);
 
-    camera = (Camera*) Camera_Basic_new(
-        800, 800,
-        (Point) {0, 0, 0}
-    );
+    reset_view();
 
     canvas = Canvas_Mem_new();
 
+    printf("\n");
+    printf("Usage:\n");
+    printf("  Middle Click  -  Center View\n");
+    printf("    Left Click  -  Zoom In and Center\n");
+    printf("   Right Click  -  Zoom Out and Center\n");
+    printf("        R       -  Reset View\n");
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB);
@@ -93,7 +127,9 @@ int main(int argc, char** argv) {
     glutCreateWindow(argv[0]);
 
     glutDisplayFunc(draw);
-    glutReshapeFunc(reshape);
+    glutReshapeFunc(on_reshape);
+    glutMouseFunc(on_mouse);
+    glutKeyboardFunc(on_key_down);
 
     glutMainLoop();
 
