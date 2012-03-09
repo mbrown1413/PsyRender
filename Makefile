@@ -17,12 +17,13 @@ CFLAGS+=-g
 
 LDFLAGS+=$(shell pkg-config libpng12 --libs)
 
+
 all: $(PROGRAM_EXEC)
 
 %.o: %.c $(INCLUDES) Makefile
 	$(CC) $(CFLAGS) -c $< -o $@
 
-bin/%: src/%.c $(LIB_OBJECTS) $(INCLUDES) bin/
+bin/%: src/%.c $(LIB_OBJECTS) $(INCLUDES)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(shell cat $(<:%.c=%.flags) 2>/dev/null) -Wno-missing-prototypes $(LIB_OBJECTS) $< -o $@
 
 bin/:
@@ -31,3 +32,5 @@ bin/:
 clean:
 	-rm $(LIB_OBJECTS)
 	-rm $(PROGRAM_EXEC)
+
+.PHONY: all clean
