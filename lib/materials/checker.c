@@ -19,7 +19,6 @@ Color Material_Checker_ray_hit(
         Vector* norm,
         unsigned int depth) {
 
-    //printf("%f %f %f\n", norm->ox, norm->oy, norm->oz);
     Material_Checker* m = (Material_Checker*) mat;
     if (( ((int) round(intersect->x)) / m->scale + \
           ((int) round(intersect->y)) / m->scale + \

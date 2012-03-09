@@ -2,6 +2,14 @@
 #ifndef _RAY_H
 #define _RAY_H
 
+#include <math.h>
+
+#ifdef M_PI
+    #define PI M_PI
+#else
+    #define PI 3.141592653589793238462643383279
+#endif
+
 typedef struct {
     unsigned char r;
     unsigned char g;
@@ -21,11 +29,18 @@ typedef struct {
     double dx, dy, dz;  // Direction
 } Ray;
 
+// These typedefs resolve any circular dependancies between the types.
 struct Object_struct;
 typedef struct Object_struct Object;
 
 struct Material_struct;
 typedef struct Material_struct Material;
+
+struct Camera_struct;
+typedef struct Camera_struct Camera;
+
+struct Canvas_struct;
+typedef struct Canvas_struct Canvas;
 
 #include "vector_math.h"
 #include "linked_list.h"
@@ -34,6 +49,7 @@ typedef struct Material_struct Material;
 #include "material.h"
 #include "object.h"
 #include "camera.h"
+#include "canvas.h"
 #include "render.h"
 
 #endif

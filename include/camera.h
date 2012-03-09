@@ -2,31 +2,23 @@
 #ifndef _RAY_CAMERA_H
 #define _RAY_CAMERA_H
 
-typedef struct {
+#define CAMERA_HEADER \
+    struct camera_func_table func; \
+    unsigned int image_height; \
+    unsigned int image_width; \
+    Point pos;
 
-    // Up direction with origin at eye center
-    Ray up;
+struct camera_func_table {
+    void (*render)(const Scene* scene, const struct Camera_struct* cam, Canvas* canvas);
+};
 
-    // Orientation in radians
-    double pitch;
-    double yaw;
-    double roll;
+struct Camera_struct {
+    CAMERA_HEADER
+};
 
-    double fov;  // Radians
+#define Camera_render(scene, cam, canvas) (cam)->func.render(scene, (Camera*)cam, canvas)
+#define Camera_free(cam) free(cam)
 
-    /*
-    // These two points define the square that the camera looks through
-    Point viewport_pt1;  // Top left of the image
-    Point viewport_pt2;  // Bottom right of the image
-    */
-
-    // Image size
-    unsigned int width;
-    unsigned int height;
-
-} Camera;
-
-Camera* Camera_new();
-void Camera_free(Camera* camera);
+#include "cameras/basic.h"
 
 #endif

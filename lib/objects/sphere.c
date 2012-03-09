@@ -13,23 +13,14 @@ Sphere* Sphere_new(double x, double y, double z, double radius) {
     s->z = z;
     s->r = radius;
     s->func.ray_intersect = Sphere_ray_intersect;
+    s->func.normal = Sphere_normal;
     s->mat = Material_new_default();
     return s;
 }
 
-void Sphere_print(const Object* obj) {
-    const Sphere* s = (Sphere*) obj;
-    printf("<Sphere x=%.2f y=%.2f z=%.2f r=%.2f>\n", s->x, s->y, s->z, s->r);
-}
-
 //TODO: Optimize and comment.  Get rid of precision issues as described here:
 //      http://wiki.cgsociety.org/index.php/Ray_Sphere_Intersection
-bool Sphere_ray_intersect(
-        const Object* obj,
-        const Ray* r,
-        Point* intersect,
-        Vector* normal) {
-
+bool Sphere_ray_intersect(const Object* obj, const Ray* r, Point* intersect) {
     const Sphere* s = (Sphere*) obj;
 
     //TODO
@@ -70,10 +61,12 @@ bool Sphere_ray_intersect(
     intersect->y = r->oy + t*r->dy;
     intersect->z = r->oz + t*r->dz;
 
-    // Normal vector
+    return true;
+}
+
+void Sphere_normal(const Object* obj, const Point* intersect, Vector* normal) {
+    Sphere* s = (Sphere*) obj;
     normal->x = s->x - intersect->x;
     normal->y = s->y - intersect->y;
     normal->z = s->z - intersect->z;
-
-    return true;
 }

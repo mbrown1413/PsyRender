@@ -6,8 +6,12 @@
 
 int main() {
     Material_Basic* mat_basic;
+
     Sphere* sphere;
     Plane* plane;
+
+    Canvas* canvas;
+    Camera* camera;
 
     Scene* scene = Scene_new();
 
@@ -33,13 +37,17 @@ int main() {
     Object_set_material((Object*) plane, Material_Checker_new(2));
     Scene_add_object(scene, (Object*) plane);
 
-    Camera* camera = Camera_new();
-    camera->width = 1600;
-    camera->height = 1600;
+    camera = (Camera*) Camera_Basic_new(
+        1600, 1600,
+        (Point) {0, 0, 0}
+    );
 
-    render(camera, scene, "output.png");
+    canvas = Canvas_Png_new("output.png");
+
+    render(scene, camera, canvas);
 
     Camera_free(camera);
     Scene_free(scene);
+    Canvas_free(canvas);
 
 }

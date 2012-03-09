@@ -10,10 +10,8 @@
     Material* mat;
 
 struct object_func_table {
-    bool (*ray_intersect)(const struct Object_struct* obj,
-                          const Ray* ray,
-                          Point* intersect,
-                          Vector* normal);
+    bool (*ray_intersect)(const struct Object_struct* obj, const Ray* ray, Point* intersect);
+    void (*normal)(const struct Object_struct* obj, const Point* intersect, Vector* normal);
 };
 
 struct Object_struct {
@@ -23,8 +21,10 @@ struct Object_struct {
 void Object_set_material(Object* obj, Material* mat);
 void Object_free(Object* obj);
 
-#define Object_ray_intersect(o, ray, intersect, norm) \
-        (o)->func.ray_intersect((Object*)o, ray, intersect, norm)
+#define Object_ray_intersect(o, ray, intersect) \
+        (o)->func.ray_intersect((Object*)o, ray, intersect)
+#define Object_normal(o, intersect, norm) \
+        (o)->func.normal((Object*)o, intersect, norm)
 
 #include "objects/sphere.h"
 #include "objects/plane.h"

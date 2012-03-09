@@ -8,6 +8,7 @@ Plane* Plane_new(double z) {
     Plane* p = (Plane*) malloc(sizeof(Plane));
     p->z = z;
     p->func.ray_intersect = Plane_ray_intersect;
+    p->func.normal = Plane_normal;
     p->mat = Material_new_default();
     return p;
 }
@@ -15,11 +16,7 @@ Plane* Plane_new(double z) {
 void Plane_print(const Object* obj) {
 }
 
-bool Plane_ray_intersect(
-        const Object* obj,
-        const Ray* r,
-        Point* intersect,
-        Vector* normal) {
+bool Plane_ray_intersect(const Object* obj, const Ray* r, Point* intersect) {
 
     Plane* p = (Plane*) obj;
     double denominator = DOT(0, 0, 1, r->dx, r->dy, r->dz);
@@ -36,9 +33,11 @@ bool Plane_ray_intersect(
     intersect->y = r->oy + t*r->dy;
     intersect->z = r->oz + t*r->dz;
 
+    return true;
+}
+
+void Plane_normal(const Object* obj, const Point* intersect, Vector* normal) {
     normal->x = 0;
     normal->y = 0;
     normal->z = 1;
-
-    return true;
 }
