@@ -23,18 +23,13 @@ Sphere* Sphere_new(double x, double y, double z, double radius) {
 bool Sphere_ray_intersect(const Object* obj, const Ray* r, Point* intersect) {
     const Sphere* s = (Sphere*) obj;
 
-    //TODO
-    if (fabs(sqrt(DIST_SQ(r->ox, r->oy, r->oz, s->x, s->y, s->z)) - s->r) < 0.1) {
-        return false;
-    }
-
     // Convert ray into object space
     double r_x = r->ox - s->x;
     double r_y = r->oy - s->y;
     double r_z = r->oz - s->z;
 
     double a = DOT(r->dx, r->dy, r->dz, r->dx, r->dy, r->dz);
-    double b = 2 * DOT(r_x, r_y, r_z, r->dx, r->dy, r->dz);
+    double b = -2 * DOT(r_x, r_y, r_z, r->dx, r->dy, r->dz);
     double c = DOT(r_x, r_y, r_z, r_x, r_y, r_z) - (s->r * s->r);
 
     double det = b*b - 4*a*c;  // Determinate
@@ -42,8 +37,8 @@ bool Sphere_ray_intersect(const Object* obj, const Ray* r, Point* intersect) {
         return false;
     }
 
-    double t1 = ( -b + sqrt(det) ) / (2*a);
-    double t2 = ( -b - sqrt(det) ) / (2*a);
+    double t1 = ( b + sqrt(det) ) / (2*a);
+    double t2 = ( b - sqrt(det) ) / (2*a);
     double t;
     if (t1 <= 0) {
         t = t2;

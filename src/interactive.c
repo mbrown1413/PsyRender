@@ -107,9 +107,10 @@ int main(int argc, char** argv) {
 
     plane = Plane_new(-2);
     Object_set_material((Object*) plane, Material_Checker_new(2));
+    plane->mat->reflectivity = 0.1;
     Scene_add_object(scene, (Object*) plane);
 
-    reset_view();
+    reset_view();  // Initializes camera
 
     canvas = Canvas_Mem_new();
 

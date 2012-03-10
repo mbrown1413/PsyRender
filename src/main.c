@@ -35,6 +35,7 @@ int main() {
 
     plane = Plane_new(-2);
     Object_set_material((Object*) plane, Material_Checker_new(2));
+    plane->mat->reflectivity = 0.1;
     Scene_add_object(scene, (Object*) plane);
 
     camera = (Camera*) Camera_Basic_new(
