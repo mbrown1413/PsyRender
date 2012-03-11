@@ -10,6 +10,8 @@
     #define PI 3.141592653589793238462643383279
 #endif
 
+#define EPSILON ( 10e-15 )
+
 #define MIN(a, b) ( (a)<(b) ? (a) : (b) )
 #define MAX(a, b) ( (a)>(b) ? (a) : (b) )
 

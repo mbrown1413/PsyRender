@@ -50,6 +50,9 @@ bool Sphere_ray_intersect(const Object* obj, const Ray* r, Point* intersect) {
     if (t <= 0) {
         return false;
     }
+    if (t < EPSILON) {
+        return false;
+    }
 
     // Intersect point
     intersect->x = r->ox + t*r->dx;

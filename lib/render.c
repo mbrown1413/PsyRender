@@ -18,7 +18,7 @@ bool render(const Scene* scene, const Camera* camera, Canvas* canvas) {
     return true;
 }
 
-Color trace_ray(const Scene* scene, const Ray* r, unsigned int depth, Object* ignore) {
+Color trace_ray(const Scene* scene, const Ray* r, unsigned int depth) {
     Point intersect;
     Vector norm;
     Object* obj;
@@ -26,7 +26,7 @@ Color trace_ray(const Scene* scene, const Ray* r, unsigned int depth, Object* ig
     Color mat_color;
     Color tmp_color;
 
-    obj = ray_intersect(scene, r, &intersect, ignore);
+    obj = ray_intersect(scene, r, &intersect);
 
     if (!obj) {
         return (Color) {0, 0, 0};
@@ -53,7 +53,7 @@ Color trace_ray(const Scene* scene, const Ray* r, unsigned int depth, Object* ig
     if (mat->reflective) {
         Ray reflected;
         ray_reflect(&reflected, r, &intersect, &norm);
-        tmp_color = trace_ray(scene, &reflected, depth, obj);
+        tmp_color = trace_ray(scene, &reflected, depth);
         result.r = MIN(255, result.r + mat->reflective * tmp_color.r);
         result.g = MIN(255, result.g + mat->reflective * tmp_color.g);
         result.b = MIN(255, result.b + mat->reflective * tmp_color.b);
@@ -62,7 +62,7 @@ Color trace_ray(const Scene* scene, const Ray* r, unsigned int depth, Object* ig
     return result;
 }
 
-Object* ray_intersect(const Scene* scene, const Ray* r, Point* intersect, Object* ignore) {
+Object* ray_intersect(const Scene* scene, const Ray* r, Point* intersect) {
     Point obj_intersect, closest_intersect={INFINITY, INFINITY, INFINITY};
     double dist, closest_dist = INFINITY;
     Object* obj;
@@ -71,13 +71,16 @@ Object* ray_intersect(const Scene* scene, const Ray* r, Point* intersect, Object
     List_start_iteration(scene->objects);
     while ((obj = (Object*) List_next(scene->objects))) {
 
-        if (obj != ignore && Object_ray_intersect(obj, r, &obj_intersect)) {
+        if (Object_ray_intersect(obj, r, &obj_intersect)) {
+
             dist = DIST_SQ(obj_intersect.x, obj_intersect.y, obj_intersect.z, r->ox, r->oy, r->oz);
             if (dist < closest_dist) {
                 closest_dist = dist;
                 closest_intersect = obj_intersect;
                 closest_obj = obj;
+
             }
+
         }
     }
     if (closest_obj != NULL) {
