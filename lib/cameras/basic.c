@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <math.h>
 
+#define MAX_FOV PI-0.5
+
 Camera_Basic* Camera_Basic_new(unsigned int image_width, unsigned int image_height, Point pos) {
     Camera_Basic* cam = (Camera_Basic*) malloc(sizeof(Camera_Basic));
     cam->func.render = Camera_Basic_render;
@@ -84,6 +86,6 @@ void Camera_Basic_zoom(Camera* _cam, unsigned int x, unsigned int y, double zoom
     cam->fov_x /= zoom_factor;
     cam->fov_y /= zoom_factor;
 
-    if (cam->fov_x >= PI) cam->fov_x = PI;
-    if (cam->fov_y >= PI) cam->fov_y = PI;
+    if (cam->fov_x >= MAX_FOV) cam->fov_x = MAX_FOV;
+    if (cam->fov_y >= MAX_FOV) cam->fov_y = MAX_FOV;
 }

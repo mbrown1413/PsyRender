@@ -6,7 +6,9 @@
 Material* Material_Basic_new() {
     Material_Basic* m = (Material_Basic*) malloc(sizeof(Material_Basic));
     m->color = (Color) {255, 255, 255};
-    m->reflectivity = 0;
+    m->diffuse = 1;
+    m->ambient = 1;
+    m->reflective = 0;
     m->func.ray_hit = Material_Basic_ray_hit;
     return (Material*) m;
 }

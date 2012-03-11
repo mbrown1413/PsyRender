@@ -10,6 +10,9 @@
     #define PI 3.141592653589793238462643383279
 #endif
 
+#define MIN(a, b) ( (a)<(b) ? (a) : (b) )
+#define MAX(a, b) ( (a)>(b) ? (a) : (b) )
+
 typedef struct {
     unsigned char r;
     unsigned char g;
@@ -29,7 +32,7 @@ typedef struct {
     double dx, dy, dz;  // Direction
 } Ray;
 
-// These typedefs resolve any circular dependancies between the types.
+// These typedefs resolve any circular dependancies between types.
 struct Object_struct;
 typedef struct Object_struct Object;
 

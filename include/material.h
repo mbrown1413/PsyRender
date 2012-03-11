@@ -4,7 +4,9 @@
 
 #define MATERIAL_HEADER \
     struct material_func_table func; \
-    double reflectivity;
+    double diffuse; \
+    double ambient; \
+    double reflective;
 
 struct material_func_table {
     Color (*ray_hit)(const Scene* scene,

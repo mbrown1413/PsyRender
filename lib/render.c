@@ -22,31 +22,44 @@ Color trace_ray(const Scene* scene, const Ray* r, unsigned int depth, Object* ig
     Point intersect;
     Vector norm;
     Object* obj;
+    Color result = {0, 0, 0};
+    Color mat_color;
+    Color tmp_color;
 
     obj = ray_intersect(scene, r, &intersect, ignore);
 
-    if (obj) {
-
-        Object_normal(obj, &intersect, &norm);
-        Material* mat = obj->mat;
-        Color mat_color = Material_ray_hit(scene, mat, r, &intersect, &norm, depth+1);
-
-        if (mat->reflectivity) {
-            Ray reflected;
-            ray_reflect(&reflected, r, &intersect, &norm);
-            Color reflected_color = trace_ray(scene, &reflected, depth, obj);
-            return (Color) {
-                (1-mat->reflectivity)*mat_color.r + mat->reflectivity*reflected_color.r,
-                (1-mat->reflectivity)*mat_color.g + mat->reflectivity*reflected_color.g,
-                (1-mat->reflectivity)*mat_color.b + mat->reflectivity*reflected_color.b
-            };
-        }
-
-        return mat_color;
-
-    } else {
+    if (!obj) {
         return (Color) {0, 0, 0};
     }
+
+    Object_normal(obj, &intersect, &norm);
+    Material* mat = obj->mat;
+    mat_color = Material_ray_hit(scene, mat, r, &intersect, &norm, depth+1);
+    vec_normalize(&norm);
+
+    // Ambient
+    result.r += mat_color.r * mat->ambient;
+    result.g += mat_color.g * mat->ambient;
+    result.b += mat_color.b * mat->ambient;
+
+    // Diffuse
+    Vector light_direction = {1, 0, 1};
+    vec_normalize(&light_direction);
+    result.r += MAX(0,mat_color.r*mat->diffuse * DOT(light_direction.x, light_direction.y, light_direction.z, norm.x, norm.y, norm.z));
+    result.g += MAX(0,mat_color.g*mat->diffuse * DOT(light_direction.x, light_direction.y, light_direction.z, norm.x, norm.y, norm.z));
+    result.b += MAX(0,mat_color.b*mat->diffuse * DOT(light_direction.x, light_direction.y, light_direction.z, norm.x, norm.y, norm.z));
+
+    // Reflective
+    if (mat->reflective) {
+        Ray reflected;
+        ray_reflect(&reflected, r, &intersect, &norm);
+        tmp_color = trace_ray(scene, &reflected, depth, obj);
+        result.r = MIN(255, result.r + mat->reflective * tmp_color.r);
+        result.g = MIN(255, result.g + mat->reflective * tmp_color.g);
+        result.b = MIN(255, result.b + mat->reflective * tmp_color.b);
+    }
+
+    return result;
 }
 
 Object* ray_intersect(const Scene* scene, const Ray* r, Point* intersect, Object* ignore) {

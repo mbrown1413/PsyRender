@@ -61,7 +61,7 @@ bool Sphere_ray_intersect(const Object* obj, const Ray* r, Point* intersect) {
 
 void Sphere_normal(const Object* obj, const Point* intersect, Vector* normal) {
     Sphere* s = (Sphere*) obj;
-    normal->x = s->x - intersect->x;
-    normal->y = s->y - intersect->y;
-    normal->z = s->z - intersect->z;
+    normal->x = intersect->x - s->x;
+    normal->y = intersect->y - s->y;
+    normal->z = intersect->z - s->z;
 }
