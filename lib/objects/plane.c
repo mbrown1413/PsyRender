@@ -6,24 +6,24 @@
 
 Plane* Plane_new(double z) {
     Plane* p = (Plane*) malloc(sizeof(Plane));
-    p->z = z;
+    p->point = (Point) {0, 0, z};
+    p->norm = (Vector) {0, 0, 1};
+    p->mat = Material_new_default();
     p->func.ray_intersect = Plane_ray_intersect;
     p->func.normal = Plane_normal;
-    p->mat = Material_new_default();
     return p;
 }
 
-void Plane_print(const Object* obj) {
-}
-
 bool Plane_ray_intersect(const Object* obj, const Ray* r, Point* intersect) {
-
     Plane* p = (Plane*) obj;
-    double denominator = DOT(0, 0, 1, r->dx, r->dy, r->dz);
+    Vector tmp_vector;
+
+    double denominator = Vector_dot(&p->norm, &r->d);
     if (denominator == 0.0) {
         return false;
     }
-    double t = -1*DOT(0, 0, 1, r->ox, r->oy, r->oz - p->z) / denominator;
+    Vector_subtract(&tmp_vector, &r->o, &p->point);
+    double t = -1*Vector_dot(&p->norm, &tmp_vector) / denominator;
     if (t <= 0) {
         return false;
     }
@@ -32,9 +32,9 @@ bool Plane_ray_intersect(const Object* obj, const Ray* r, Point* intersect) {
     }
 
     // Intersect point
-    intersect->x = r->ox + t*r->dx;
-    intersect->y = r->oy + t*r->dy;
-    intersect->z = r->oz + t*r->dz;
+    intersect->x = r->o.x + t*r->d.x;
+    intersect->y = r->o.y + t*r->d.y;
+    intersect->z = r->o.z + t*r->d.z;
 
     return true;
 }

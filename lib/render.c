@@ -25,6 +25,7 @@ Color trace_ray(const Scene* scene, const Ray* r, unsigned int depth) {
     Color result = {0, 0, 0};
     Color mat_color;
     Color tmp_color;
+    Ray tmp_ray;
 
     obj = ray_intersect(scene, r, &intersect);
 
@@ -35,28 +36,26 @@ Color trace_ray(const Scene* scene, const Ray* r, unsigned int depth) {
     Object_normal(obj, &intersect, &norm);
     Material* mat = obj->mat;
     mat_color = Material_ray_hit(scene, mat, r, &intersect, &norm, depth+1);
-    vec_normalize(&norm);
+    Vector_normalize(&norm);
 
     // Ambient
-    result.r += mat_color.r * mat->ambient;
-    result.g += mat_color.g * mat->ambient;
-    result.b += mat_color.b * mat->ambient;
+    Color_scalar_mult(&result, &mat_color, mat->ambient);
 
     // Diffuse
-    Vector light_direction = {1, 0, 1};
-    vec_normalize(&light_direction);
-    result.r += MAX(0,mat_color.r*mat->diffuse * DOT(light_direction.x, light_direction.y, light_direction.z, norm.x, norm.y, norm.z));
-    result.g += MAX(0,mat_color.g*mat->diffuse * DOT(light_direction.x, light_direction.y, light_direction.z, norm.x, norm.y, norm.z));
-    result.b += MAX(0,mat_color.b*mat->diffuse * DOT(light_direction.x, light_direction.y, light_direction.z, norm.x, norm.y, norm.z));
+    Vector light_direction = {1, 0, 1}; // One hardcoded light for now :/
+    Vector_normalize(&light_direction);
+
+    tmp_color = mat_color;
+    double angle_factor = MAX(0, Vector_dot(&light_direction, &norm));
+    Color_scalar_mult(&tmp_color, &tmp_color, mat->diffuse * angle_factor);
+    Color_add(&result, &result, &tmp_color);
 
     // Reflective
     if (mat->reflective) {
-        Ray reflected;
-        ray_reflect(&reflected, r, &intersect, &norm);
-        tmp_color = trace_ray(scene, &reflected, depth);
-        result.r = MIN(255, result.r + mat->reflective * tmp_color.r);
-        result.g = MIN(255, result.g + mat->reflective * tmp_color.g);
-        result.b = MIN(255, result.b + mat->reflective * tmp_color.b);
+        ray_reflect(&tmp_ray, r, &intersect, &norm);
+        tmp_color = trace_ray(scene, &tmp_ray, depth);
+        Color_scalar_mult(&tmp_color, &tmp_color, mat->reflective);
+        Color_add(&result, &result, &tmp_color);
     }
 
     return result;
@@ -73,12 +72,11 @@ Object* ray_intersect(const Scene* scene, const Ray* r, Point* intersect) {
 
         if (Object_ray_intersect(obj, r, &obj_intersect)) {
 
-            dist = DIST_SQ(obj_intersect.x, obj_intersect.y, obj_intersect.z, r->ox, r->oy, r->oz);
+            dist = Vector_dist_squared(&obj_intersect, &r->o);
             if (dist < closest_dist) {
                 closest_dist = dist;
                 closest_intersect = obj_intersect;
                 closest_obj = obj;
-
             }
 
         }

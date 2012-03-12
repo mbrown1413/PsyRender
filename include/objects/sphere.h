@@ -4,7 +4,8 @@
 
 typedef struct {
     OBJECT_HEADER
-    double x, y, z, r;
+    Point pos;
+    double r;
 } Sphere;
 
 Sphere* Sphere_new(double x, double y, double z, double radius);

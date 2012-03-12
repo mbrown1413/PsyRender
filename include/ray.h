@@ -18,22 +18,14 @@
 #define MAX(a, b) ( (a)>(b) ? (a) : (b) )
 
 typedef struct {
-    unsigned char r;
-    unsigned char g;
-    unsigned char b;
-} Color;
-
-typedef struct {
-    double x, y, z;
-} Point;
-
-typedef struct {
     double x, y, z;
 } Vector;
 
+typedef Vector Point;
+
 typedef struct {
-    double ox, oy, oz;  // Origin
-    double dx, dy, dz;  // Direction
+    Point o;  // Origin
+    Vector d;  // Direction
 } Ray;
 
 // These typedefs resolve any circular dependancies between types.
@@ -49,8 +41,9 @@ typedef struct Camera_struct Camera;
 struct Canvas_struct;
 typedef struct Canvas_struct Canvas;
 
-#include "vector_math.h"
+#include "vector.h"
 #include "linked_list.h"
+#include "color.h"
 
 #include "scene.h"
 #include "material.h"
