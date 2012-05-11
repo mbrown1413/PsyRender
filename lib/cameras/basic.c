@@ -15,7 +15,7 @@ Camera_Basic* Camera_Basic_new(unsigned int image_width, unsigned int image_heig
     cam->forward = (Vector) {0, 1, 0};
     cam->up = (Vector) {0, 0, 1};
     cam->fov_x = 70 * (PI/180);
-    cam->fov_y = 70 * (PI/180);
+    cam->fov_y = cam->fov_x * cam->image_height / cam->image_width;
     return cam;
 }
 
@@ -39,14 +39,15 @@ void Camera_Basic_render(const Scene* scene, const Camera* _cam, Canvas* canvas)
     Vector_scalar_mult(&delta_y, &cam->up, -2*tan(cam->fov_y/2) / cam->image_height);
 
     // Point ray towards upper left pixel of image
-    ray.d.x = cam->forward.x + (-1*delta_x.x * cam->image_width/2.0) + (-delta_y.x * cam->image_height/2.0);
-    ray.d.y = cam->forward.y + (-1*delta_x.y * cam->image_width/2.0) + (-delta_y.y * cam->image_height/2.0);
-    ray.d.z = cam->forward.z + (-1*delta_x.z * cam->image_width/2.0) + (-delta_y.z * cam->image_height/2.0);
+    ray.d.x = cam->forward.x - (delta_x.x * cam->image_width/2.0) - (delta_y.x * cam->image_height/2.0);
+    ray.d.y = cam->forward.y - (delta_x.y * cam->image_width/2.0) - (delta_y.y * cam->image_height/2.0);
+    ray.d.z = cam->forward.z - (delta_x.z * cam->image_width/2.0) - (delta_y.z * cam->image_height/2.0);
 
     for (int y=0; y<cam->image_height; y++) {
         row = Canvas_get_next_row(canvas, (Camera*)cam, y);
         for (int x=0; x<cam->image_width; x++) {
-            row[x] = trace_ray(scene, &ray, 0);
+
+            row[x] = trace_ray_priv(scene, &ray, 0, ETHER_INDEX_OF_REFRACTION);
 
             ray.d.x += delta_x.x;
             ray.d.y += delta_x.y;

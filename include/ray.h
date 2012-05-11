@@ -12,7 +12,10 @@
 
 // Guess at the maximum floating point error.  Used for comparing floating
 // point numbers.
-#define EPSILON ( 1.0e-10 )
+#define EPSILON ( 1.0e-5 )
+
+// Index of refraction for the medium that contains no objects.
+#define ETHER_INDEX_OF_REFRACTION 1.000277
 
 #define MIN(a, b) ( (a)<(b) ? (a) : (b) )
 #define MAX(a, b) ( (a)>(b) ? (a) : (b) )
@@ -30,15 +33,12 @@ typedef struct {
 
 // These typedefs resolve any circular dependancies between types.
 struct Object_struct;
-typedef struct Object_struct Object;
-
 struct Material_struct;
-typedef struct Material_struct Material;
-
 struct Camera_struct;
-typedef struct Camera_struct Camera;
-
 struct Canvas_struct;
+typedef struct Object_struct Object;
+typedef struct Material_struct Material;
+typedef struct Camera_struct Camera;
 typedef struct Canvas_struct Canvas;
 
 #include "vector.h"

@@ -9,6 +9,7 @@ Material* Material_Basic_new() {
     m->diffuse = 1;
     m->ambient = 1;
     m->reflective = 0;
+    m->refractive = 0;
     m->func.ray_hit = Material_Basic_ray_hit;
     return (Material*) m;
 }

@@ -12,6 +12,7 @@
 struct object_func_table {
     bool (*ray_intersect)(const struct Object_struct* obj, const Ray* ray, Point* intersect);
     void (*normal)(const struct Object_struct* obj, const Point* intersect, Vector* normal);
+    bool (*inside)(const struct Object_struct* obj, const Point* point);
 };
 
 struct Object_struct {
@@ -25,6 +26,8 @@ void Object_free(Object* obj);
         (o)->func.ray_intersect((Object*)o, ray, intersect)
 #define Object_normal(o, intersect, norm) \
         (o)->func.normal((Object*)o, intersect, norm)
+#define Object_inside(o, point) \
+        (o)->func.inside(o, point)
 
 #include "objects/sphere.h"
 #include "objects/plane.h"

@@ -16,5 +16,6 @@ double Vector_dot(const Vector* a, const Vector* b);
 void Vector_add(Vector* result, const Vector* a, const Vector* b);
 void Vector_subtract(Vector* result, const Vector* a, const Vector* b);
 double Vector_dist_squared(const Vector* a, const Vector* b);
+void Vector_assign(Vector* result, const Vector* v);
 
 #endif

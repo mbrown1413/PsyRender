@@ -6,7 +6,8 @@
     struct material_func_table func; \
     double diffuse; \
     double ambient; \
-    double reflective;
+    double reflective; \
+    double refractive;
 
 struct material_func_table {
     Color (*ray_hit)(const Scene* scene,

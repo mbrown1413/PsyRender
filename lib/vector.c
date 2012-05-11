@@ -69,3 +69,9 @@ double Vector_dist_squared(const Vector* a, const Vector* b) {
            (a->y - b->y) * (a->y - b->y) + \
            (a->z - b->z) * (a->z - b->z);
 }
+
+void Vector_assign(Vector* result, const Vector* v) {
+    result->x = v->x;
+    result->y = v->y;
+    result->z = v->z;
+}

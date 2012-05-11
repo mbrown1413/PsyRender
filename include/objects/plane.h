@@ -11,5 +11,6 @@ typedef struct {
 Plane* Plane_new(double z);
 bool Plane_ray_intersect(const Object* obj, const Ray* r, Point* intersect);
 void Plane_normal(const Object* obj, const Point* intersect, Vector* normal);
+bool Plane_inside(const Object* obj, const Point* point);
 
 #endif

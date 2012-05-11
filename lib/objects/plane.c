@@ -11,6 +11,7 @@ Plane* Plane_new(double z) {
     p->mat = Material_new_default();
     p->func.ray_intersect = Plane_ray_intersect;
     p->func.normal = Plane_normal;
+    p->func.inside = Plane_inside;
     return p;
 }
 
@@ -43,4 +44,8 @@ void Plane_normal(const Object* obj, const Point* intersect, Vector* normal) {
     normal->x = 0;
     normal->y = 0;
     normal->z = 1;
+}
+
+bool Plane_inside(const Object* obj, const Point* point) {
+    return true;
 }

@@ -9,6 +9,7 @@ Material* Material_Checker_new(unsigned int scale) {
     m->diffuse = 1;
     m->ambient = 1;
     m->reflective = 0;
+    m->refractive = 0;
     m->func.ray_hit = Material_Checker_ray_hit;
     return (Material*) m;
 }
@@ -24,7 +25,8 @@ Color Material_Checker_ray_hit(
     Material_Checker* m = (Material_Checker*) mat;
     if (( ((int) round(intersect->x)) / m->scale + \
           ((int) round(intersect->y)) / m->scale + \
-          ((int) round(intersect->z)) / m->scale) % 2) {
+          ((int) round(intersect->z)) / m->scale) % 2)
+    {
         return (Color) {0, 0, 0};
     } else {
         return (Color) {255, 255, 255};
