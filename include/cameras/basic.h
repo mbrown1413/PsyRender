@@ -9,8 +9,8 @@ typedef struct {
     double fov_x, fov_y;
 } Camera_Basic;
 
-Camera_Basic* Camera_Basic_new();
-void Camera_Basic_render(const Scene* scene, const Camera* _cam, Canvas* canvas);
-void Camera_Basic_zoom(Camera* cam, unsigned int x, unsigned int y, double zoom_factor);
+Camera_Basic* Camera_Basic_new(Point pos);
+void Camera_Basic_map(const Camera* _cam, double x, double y, Ray* ray);
+void Camera_Basic_zoom(Camera* cam, double x, double y, double zoom_factor);
 
 #endif

@@ -47,11 +47,10 @@ int main() {
     Scene_add_object(scene, (Object*) plane);
 
     camera = (Camera*) Camera_Basic_new(
-        1600, 1600,
         (Point) {0, 0, 0}
     );
 
-    canvas = Canvas_Png_new("output.png");
+    canvas = Canvas_Png_new("output.png", 1600, 1600);
 
     render(scene, camera, canvas);
 

@@ -7,14 +7,7 @@
 #include "ray.h"
 
 bool render(const Scene* scene, const Camera* camera, Canvas* canvas) {
-    if (!Canvas_init(canvas, camera)) {
-        fprintf(stderr, "Error initializing canvas: ");
-        fprintf(stderr, canvas->error_str);
-        fprintf(stderr, "\n");
-        return false;
-    }
-    Camera_render(scene, camera, canvas);
-    Canvas_finish(canvas);
+    Canvas_render(canvas, scene, camera);
     return true;
 }
 

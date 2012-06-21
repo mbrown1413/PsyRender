@@ -3,48 +3,46 @@
 
 #include "ray.h"
 
+//TODO: More options
+//TODO: Alignment option
 Canvas* Canvas_Mem_new() {
     Canvas_Mem* canvas = (Canvas_Mem*) malloc(sizeof(Canvas_Mem));
-    canvas->func.init = Canvas_Mem_init;
     canvas->image = NULL;
-    canvas->current_row = NULL;
-
-    canvas->func.get_next_row = Canvas_Mem_get_next_row;
-    canvas->func.finish_row = Canvas_Mem_finish_row;
-    canvas->func.finish = Canvas_Mem_finish;
+    canvas->func.render = Canvas_Mem_render;
     canvas->func.free = Canvas_Mem_free;
     return (Canvas*) canvas;
 }
 
-bool Canvas_Mem_init(Canvas* canvas, const Camera* cam) {
-    Canvas_Mem* mem_canvas = (Canvas_Mem*) canvas;
-    if (mem_canvas->image) {
-        free(mem_canvas->image);
+bool Canvas_Mem_render(Canvas* _canvas, const Scene* scene, const Camera* cam) {
+    Canvas_Mem* canvas = (Canvas_Mem*) _canvas;
+    Color* row;
+    Ray ray;
+
+    // Allocate image memory
+    if (canvas->image) {
+        free(canvas->image);
     }
-    mem_canvas->image = malloc(sizeof(Color) * cam->image_width * cam->image_height);
-    if (!mem_canvas->image) {
-        Canvas_set_error(canvas, "Could not allocate memory for image!");
+    canvas->image = malloc(sizeof(Color) * canvas->width * canvas->height);
+    if (!canvas->image) {
+        Canvas_set_error(_canvas, "Could not allocate memory for image!");
         return false;
     }
-    mem_canvas->current_row = mem_canvas->image;
+
+    row = canvas->image;
+    for (int y=canvas->height-1; y>=0; y--) {
+        for (int x=0; x<canvas->width; x++) {
+            Camera_map(cam, ((double)x)/canvas->width, ((double)y)/canvas->height, &ray);
+            row[x] = trace_ray_priv(scene, &ray, 0, ETHER_INDEX_OF_REFRACTION);
+        }
+        row += canvas->width;
+    }
     return true;
 }
 
-Color* Canvas_Mem_get_next_row(Canvas* canvas, const Camera* cam, unsigned int row) {
-    Canvas_Mem* mem_canvas = (Canvas_Mem*) canvas;
-    return &mem_canvas->image[row*cam->image_width];
-}
-
-void Canvas_Mem_finish_row(Canvas* canvas, Color* row) {
-}
-
-void Canvas_Mem_finish(Canvas* canvas) {
-}
-
-void Canvas_Mem_free(Canvas* canvas) {
-    Canvas_Mem* mem_canvas = (Canvas_Mem*) canvas;
-    if (mem_canvas->image) {
-        free(mem_canvas->image);
+void Canvas_Mem_free(Canvas* _canvas) {
+    Canvas_Mem* canvas = (Canvas_Mem*) _canvas;
+    if (canvas->image) {
+        free(canvas->image);
     }
-    free(mem_canvas);
+    free(canvas);
 }

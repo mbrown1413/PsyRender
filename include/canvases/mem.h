@@ -5,14 +5,12 @@
 typedef struct {
     CANVAS_HEADER
     Color* image;
-    Color* current_row;
+    unsigned int width;
+    unsigned int height;
 } Canvas_Mem;
 
 Canvas* Canvas_Mem_new();
-bool Canvas_Mem_init(Canvas* canvas, const Camera* cam);
-Color* Canvas_Mem_get_next_row(Canvas* canvas, const Camera* cam, unsigned int row);
-void Canvas_Mem_finish_row(Canvas* canvas, Color* row);
-void Canvas_Mem_finish(Canvas* canvas);
+bool Canvas_Mem_render(Canvas* _canvas, const Scene* scene, const Camera* cam);
 void Canvas_Mem_free(Canvas* canvas);
 
 #endif

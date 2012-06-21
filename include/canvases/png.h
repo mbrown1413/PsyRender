@@ -12,13 +12,12 @@ typedef struct {
     Color* row;
     png_structp write_ptr;
     png_infop info_ptr;
+    unsigned int width;
+    unsigned int height;
 } Canvas_Png;
 
-Canvas* Canvas_Png_new(const char* filename);
-bool Canvas_Png_init(Canvas* canvas, const Camera* cam);
-Color* Canvas_Png_get_next_row(Canvas* canvas, const Camera* cam, unsigned int row);
-void Canvas_Png_finish_row(Canvas* canvas, Color* row);
-void Canvas_Png_finish(Canvas* canvas);
+Canvas* Canvas_Png_new(const char* filename, unsigned int width, unsigned int height);
+bool Canvas_Png_render(Canvas* _canvas, const Scene* scene, const Camera* cam);
 void Canvas_Png_free(Canvas* canvas);
 
 #endif

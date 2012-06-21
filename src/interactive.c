@@ -11,7 +11,7 @@
 
 #define ZOOM_FACTOR 3
 
-Canvas* canvas;
+Canvas_Mem* canvas;
 Camera* camera = NULL;
 Scene* scene;
 
@@ -20,7 +20,6 @@ void reset_view() {
         Camera_free(camera);
     }
     camera = (Camera*) Camera_Basic_new(
-        800, 800,
         (Point) {0, 0, 0}
     );
 
@@ -40,14 +39,20 @@ void horizontal_flip(Color* image, unsigned int width, unsigned int height) {
 }
 
 void on_mouse(int button, int state, int x, int y) {
+
+    // Convert to canvas coordinates: from (0, 0) to (1, 1) with (0, 0) in the
+    // bottom left.
+    double canvas_x = ((double)x) / canvas->width;
+    double canvas_y = 1 - ((double)y) / canvas->height;
+
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-        Camera_Basic_zoom(camera, x, y, ZOOM_FACTOR);
+        Camera_Basic_zoom(camera, canvas_x, canvas_y, ZOOM_FACTOR);
         glutPostRedisplay();
     } else if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) {
-        Camera_Basic_zoom(camera, x, y, 1.0/ZOOM_FACTOR);
+        Camera_Basic_zoom(camera, canvas_x, canvas_y, 1.0/ZOOM_FACTOR);
         glutPostRedisplay();
     } else if (button == GLUT_MIDDLE_BUTTON && state == GLUT_DOWN) {
-        Camera_Basic_zoom(camera, x, y, 1);
+        Camera_Basic_zoom(camera, canvas_x, canvas_y, 1);
         glutPostRedisplay();
     }
 }
@@ -59,19 +64,41 @@ void on_key_down(unsigned char key, int x, int y) {
     }
 }
 
+void on_special(int key, int x, int y) {
+    switch (key) {
+        case GLUT_KEY_LEFT:
+            camera->pos.x -= 0.1;
+            glutPostRedisplay();
+        break;
+        case GLUT_KEY_RIGHT:
+            camera->pos.x += 0.1;
+            glutPostRedisplay();
+        break;
+        case GLUT_KEY_UP:
+            camera->pos.y += 0.1;
+            glutPostRedisplay();
+        break;
+        case GLUT_KEY_DOWN:
+            camera->pos.y -= 0.1;
+            glutPostRedisplay();
+        break;
+    }
+}
+
 void on_reshape(int w, int h) {
-    camera->image_width = w;
-    camera->image_height = h;
+    canvas->width = w;
+    canvas->height = h;
     glutPostRedisplay();
 }
 
 void draw() {
-    render(scene, camera, canvas);
-    Color* image = ((Canvas_Mem*) canvas)->image;
-    horizontal_flip(image, camera->image_width, camera->image_height);
+    render(scene, camera, (Canvas*) canvas);
+    Color* image = canvas->image;
+    horizontal_flip(image, canvas->width, canvas->height);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glDrawPixels(
-        camera->image_width,
-        camera->image_height,
+        canvas->width,
+        canvas->height,
         GL_RGB,
         GL_UNSIGNED_BYTE,
         (GLvoid*) image
@@ -120,7 +147,7 @@ int main(int argc, char** argv) {
 
     reset_view();  // Initializes camera
 
-    canvas = Canvas_Mem_new();
+    canvas = (Canvas_Mem*) Canvas_Mem_new();
 
     printf("\n");
     printf("Usage:\n");
@@ -131,7 +158,7 @@ int main(int argc, char** argv) {
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB);
-    glutInitWindowSize(camera->image_width, camera->image_height);
+    glutInitWindowSize(400, 400);
     glutInitWindowPosition(0, 0);
     glutCreateWindow(argv[0]);
 
@@ -139,9 +166,9 @@ int main(int argc, char** argv) {
     glutReshapeFunc(on_reshape);
     glutMouseFunc(on_mouse);
     glutKeyboardFunc(on_key_down);
+    glutSpecialFunc(on_special);
 
     glutMainLoop();
-
 
     Camera_free(camera);
     Scene_free(scene);
