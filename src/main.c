@@ -5,7 +5,7 @@
 #include "ray.h"
 
 int main() {
-    Material_Basic* mat_basic;
+    Material_Solid* mat_basic;
 
     Sphere* sphere;
     Plane* plane;
@@ -15,8 +15,10 @@ int main() {
 
     Scene* scene = Scene_new();
 
+    RenderMeth* render_method;
+
     sphere = Sphere_new(2, 5, -1, 1);
-    mat_basic = (Material_Basic*) sphere->mat;
+    mat_basic = (Material_Solid*) sphere->mat;
     mat_basic->color = (Color) {255, 0, 0};
     mat_basic->diffuse = 0.4;
     mat_basic->ambient = 0.1;
@@ -24,7 +26,7 @@ int main() {
     Scene_add_object(scene, (Object*) sphere);
 
     sphere = Sphere_new(-2, 7, -1, 1);
-    mat_basic = (Material_Basic*) sphere->mat;
+    mat_basic = (Material_Solid*) sphere->mat;
     mat_basic->color = (Color) {0, 0, 255};
     mat_basic->diffuse = 0.4;
     mat_basic->ambient = 0.1;
@@ -32,7 +34,7 @@ int main() {
     Scene_add_object(scene, (Object*) sphere);
 
     sphere = Sphere_new(0, 10, 1, 3);
-    mat_basic = (Material_Basic*) sphere->mat;
+    mat_basic = (Material_Solid*) sphere->mat;
     mat_basic->color = (Color) {0, 255, 0};
     mat_basic->diffuse = 0.4;
     mat_basic->ambient = 0.1;
@@ -52,7 +54,9 @@ int main() {
 
     canvas = Canvas_Png_new("output.png", 1600, 1600);
 
-    render(scene, camera, canvas);
+    render_method = RenderMeth_RayTraceSimple_new();
+
+    RenderMeth_render(render_method, scene, camera, (Canvas*) canvas);
 
     Camera_free(camera);
     Scene_free(scene);

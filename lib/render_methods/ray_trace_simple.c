@@ -14,7 +14,7 @@ bool RenderMeth_RayTraceSimple_render(RenderMeth* meth, Scene* scene, Camera* ca
     Color* row;
     Ray ray;
 
-    Canvas_init(canvas);
+    Canvas_start(canvas);
 
     for (int y=canvas->height-1; y>=0; y--) {
         row = Canvas_get_next_row(canvas);

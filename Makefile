@@ -1,6 +1,5 @@
 
-#PROGRAM_SRC=$(wildcard src/*.c)
-PROGRAM_SRC=src/interactive.c
+PROGRAM_SRC=$(wildcard src/*.c)
 PROGRAM_EXEC=$(patsubst src/%.c, bin/%, $(PROGRAM_SRC))
 
 LIB_DIRS=lib lib/objects lib/materials lib/canvases lib/cameras lib/data_structs lib/render_methods

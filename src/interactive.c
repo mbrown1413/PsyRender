@@ -150,7 +150,7 @@ int main(int argc, char** argv) {
 
     reset_view();  // Initializes camera
 
-    canvas = (Canvas_Mem*) Canvas_Mem_new();
+    canvas = (Canvas_Mem*) Canvas_Mem_new(400, 400);
 
     printf("\n");
     printf("Usage:\n");
