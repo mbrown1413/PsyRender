@@ -1,14 +1,14 @@
 
-#ifndef _RAY_MATERIAL_BASIC_H
-#define _RAY_MATERIAL_BASIC_H
+#ifndef _RAY_MATERIAL_SOLID_H
+#define _RAY_MATERIAL_SOLID_H
 
 typedef struct {
     MATERIAL_HEADER
     Color color;
-} Material_Basic;
+} Material_Solid;
 
-Material* Material_Basic_new();
-Color Material_Basic_ray_hit(
+Material* Material_Solid_new();
+Color Material_Solid_ray_hit(
         const Scene* scene,
         const Material* mat,
         const Ray* ray,

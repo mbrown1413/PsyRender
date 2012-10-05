@@ -32,24 +32,26 @@ typedef struct {
 } Ray;
 
 // These typedefs resolve any circular dependancies between types.
+struct RenderMeth_struct;
 struct Object_struct;
 struct Material_struct;
 struct Camera_struct;
 struct Canvas_struct;
+typedef struct RenderMeth_struct RenderMeth;
 typedef struct Object_struct Object;
 typedef struct Material_struct Material;
 typedef struct Camera_struct Camera;
 typedef struct Canvas_struct Canvas;
 
-#include "vector.h"
-#include "linked_list.h"
-#include "color.h"
+#include "lib/data_structs/vector.h"
+#include "lib/data_structs/linked_list.h"
+#include "lib/data_structs/color.h"
 
-#include "scene.h"
-#include "material.h"
-#include "object.h"
-#include "camera.h"
-#include "canvas.h"
-#include "render.h"
+#include "lib/scene.h"
+#include "lib/material.h"
+#include "lib/object.h"
+#include "lib/camera.h"
+#include "lib/canvas.h"
+#include "lib/render_method.h"
 
 #endif

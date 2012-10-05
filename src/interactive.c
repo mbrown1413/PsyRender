@@ -11,6 +11,7 @@
 
 #define ZOOM_FACTOR 3
 
+RenderMeth* render_method;
 Canvas_Mem* canvas;
 Camera* camera = NULL;
 Scene* scene;
@@ -92,7 +93,7 @@ void on_reshape(int w, int h) {
 }
 
 void draw() {
-    render(scene, camera, (Canvas*) canvas);
+    RenderMeth_render(render_method, scene, camera, (Canvas*) canvas);
     Color* image = canvas->image;
     horizontal_flip(image, canvas->width, canvas->height);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -108,14 +109,16 @@ void draw() {
 }
 
 int main(int argc, char** argv) {
-    Material_Basic* mat_basic;
+    Material_Solid* mat_basic;
     Sphere* sphere;
     Plane* plane;
+
+    render_method = RenderMeth_RayTraceSimple_new();
 
     scene = Scene_new();
 
     sphere = Sphere_new(2, 5, -1, 1);
-    mat_basic = (Material_Basic*) sphere->mat;
+    mat_basic = (Material_Solid*) sphere->mat;
     mat_basic->color = (Color) {255, 0, 0};
     mat_basic->diffuse = 0.4;
     mat_basic->ambient = 0.1;
@@ -123,7 +126,7 @@ int main(int argc, char** argv) {
     Scene_add_object(scene, (Object*) sphere);
 
     sphere = Sphere_new(-2, 7, -1, 1);
-    mat_basic = (Material_Basic*) sphere->mat;
+    mat_basic = (Material_Solid*) sphere->mat;
     mat_basic->color = (Color) {0, 0, 255};
     mat_basic->diffuse = 0.4;
     mat_basic->ambient = 0.1;
@@ -131,7 +134,7 @@ int main(int argc, char** argv) {
     Scene_add_object(scene, (Object*) sphere);
 
     sphere = Sphere_new(0, 10, 1, 3);
-    mat_basic = (Material_Basic*) sphere->mat;
+    mat_basic = (Material_Solid*) sphere->mat;
     mat_basic->color = (Color) {0, 255, 0};
     mat_basic->diffuse = 0.4;
     mat_basic->ambient = 0.1;

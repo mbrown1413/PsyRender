@@ -1,19 +1,19 @@
 
-INCLUDE_DIR=include/
-
-PROGRAM_SRC=$(wildcard src/*.c)
+#PROGRAM_SRC=$(wildcard src/*.c)
+PROGRAM_SRC=src/interactive.c
 PROGRAM_EXEC=$(patsubst src/%.c, bin/%, $(PROGRAM_SRC))
 
-LIB_DIRS=lib lib/objects lib/materials lib/canvases lib/cameras
+LIB_DIRS=lib lib/objects lib/materials lib/canvases lib/cameras lib/data_structs lib/render_methods
 LIB_SRC=$(foreach DIR, $(LIB_DIRS), $(wildcard $(DIR)/*.c))
 LIB_OBJECTS=$(patsubst %.c, %.o, $(LIB_SRC))
 
 INCLUDE_DIRS=$(patsubst lib/%, include/%, LIB_DIRS)
 INCLUDES=$(foreach DIR, $(INCLUDE_DIRS), $(wildcard $(DIR)/*.h))
 
-CFLAGS+=-Iinclude/ --std=c99 -Werror -Wall -pedantic -lm
+CFLAGS+=-I./ --std=c99 -Werror -Wall -pedantic -lm
 CFLAGS+=$(shell pkg-config libpng12 --cflags)
 CFLAGS+=-g
+CFLAGS+=-O3
 
 LDFLAGS+=$(shell pkg-config libpng12 --libs)
 

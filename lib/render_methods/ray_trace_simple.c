@@ -1,21 +1,35 @@
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <math.h>
-
 #include "ray.h"
 
-bool render(const Scene* scene, const Camera* camera, Canvas* canvas) {
-    Canvas_render(canvas, scene, camera);
+Color trace_ray(const Scene* scene, const Ray* _r, unsigned int depth, double n1);
+Object* ray_intersect(const Scene* scene, const Ray* r, Point* intersect);
+
+RenderMeth* RenderMeth_RayTraceSimple_new() {
+    RenderMeth_RayTraceSimple* render_meth = (RenderMeth_RayTraceSimple*) malloc(sizeof(RenderMeth_RayTraceSimple));
+    render_meth->func.render = RenderMeth_RayTraceSimple_render;
+    return (RenderMeth*) render_meth;
+}
+
+bool RenderMeth_RayTraceSimple_render(RenderMeth* meth, Scene* scene, Camera* cam, Canvas* canvas) {
+    Color* row;
+    Ray ray;
+
+    Canvas_init(canvas);
+
+    for (int y=canvas->height-1; y>=0; y--) {
+        row = Canvas_get_next_row(canvas);
+        for (int x=0; x<canvas->width; x++) {
+            Camera_map(cam, ((double)x)/canvas->width, ((double)y)/canvas->height, &ray);
+            row[x] = trace_ray(scene, &ray, 0, ETHER_INDEX_OF_REFRACTION);
+        }
+        Canvas_write_row(canvas, row);
+    }
+
+    Canvas_finish(canvas);
     return true;
 }
 
-Color trace_ray(const Scene* scene, const Ray* r) {
-    return trace_ray_priv(scene, r, 0, ETHER_INDEX_OF_REFRACTION);
-}
-
-Color trace_ray_priv(const Scene* scene, const Ray* _r, unsigned int depth, double n1) {
+Color trace_ray(const Scene* scene, const Ray* _r, unsigned int depth, double n1) {
     Point intersect;
     Vector norm;
     Object* obj;
@@ -58,7 +72,7 @@ Color trace_ray_priv(const Scene* scene, const Ray* _r, unsigned int depth, doub
     // Reflective
     if (mat->reflective) {
         ray_reflect(&tmp_ray, &r, &intersect, &norm);
-        tmp_color = trace_ray_priv(scene, &tmp_ray, depth+1, n1);
+        tmp_color = trace_ray(scene, &tmp_ray, depth+1, n1);
         Color_scalar_mult(&tmp_color, &tmp_color, mat->reflective);
         Color_add(&result, &result, &tmp_color);
     }
@@ -89,7 +103,7 @@ Color trace_ray_priv(const Scene* scene, const Ray* _r, unsigned int depth, doub
             Vector_assign(&tmp_ray.o, &intersect);
             Vector_assign(&tmp_ray.d, &refracted);
 
-            tmp_color = trace_ray_priv(scene, &tmp_ray, depth+1, n2);
+            tmp_color = trace_ray(scene, &tmp_ray, depth+1, n2);
             Color_scalar_mult(&tmp_color, &tmp_color, mat->refractive);
             Color_add(&result, &result, &tmp_color);
         }

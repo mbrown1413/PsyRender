@@ -1,41 +1,47 @@
 
-#include <stdlib.h>
+#include <stdio.h>
 
 #include "ray.h"
 
-//TODO: More options
-//TODO: Alignment option
 Canvas* Canvas_Mem_new() {
     Canvas_Mem* canvas = (Canvas_Mem*) malloc(sizeof(Canvas_Mem));
     canvas->image = NULL;
-    canvas->func.render = Canvas_Mem_render;
+    canvas->func.init = Canvas_Mem_init;
+    canvas->func.get_next_row = Canvas_Mem_get_next_row;
+    canvas->func.write_row = Canvas_Mem_write_row;
+    canvas->func.finish = Canvas_Mem_finish;
     canvas->func.free = Canvas_Mem_free;
     return (Canvas*) canvas;
 }
 
-bool Canvas_Mem_render(Canvas* _canvas, const Scene* scene, const Camera* cam) {
+bool Canvas_Mem_init(Canvas* _canvas) {
     Canvas_Mem* canvas = (Canvas_Mem*) _canvas;
-    Color* row;
-    Ray ray;
 
-    // Allocate image memory
-    if (canvas->image) {
-        free(canvas->image);
-    }
-    canvas->image = malloc(sizeof(Color) * canvas->width * canvas->height);
     if (!canvas->image) {
-        Canvas_set_error(_canvas, "Could not allocate memory for image!");
+        canvas->image = (Color*) malloc(sizeof(Color) * canvas->width * canvas->height);
+    }
+    if (!canvas->image) {
+        fprintf(stderr, "Could not allocate memory for image!");
         return false;
     }
 
-    row = canvas->image;
-    for (int y=canvas->height-1; y>=0; y--) {
-        for (int x=0; x<canvas->width; x++) {
-            Camera_map(cam, ((double)x)/canvas->width, ((double)y)/canvas->height, &ray);
-            row[x] = trace_ray_priv(scene, &ray, 0, ETHER_INDEX_OF_REFRACTION);
-        }
-        row += canvas->width;
-    }
+    canvas->next_row = 0;
+    return true;
+}
+
+Color* Canvas_Mem_get_next_row(Canvas* _canvas) {
+    Canvas_Mem* canvas = (Canvas_Mem*) _canvas;
+    return &canvas->image[canvas->width * canvas->next_row];
+}
+
+bool Canvas_Mem_write_row(Canvas* _canvas, Color* row) {
+    // Memory was written directly, no need to write anything
+    Canvas_Mem* canvas = (Canvas_Mem*) _canvas;
+    canvas->next_row++;
+    return true;
+}
+
+bool Canvas_Mem_finish(Canvas* canvas) {
     return true;
 }
 
