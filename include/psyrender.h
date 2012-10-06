@@ -32,16 +32,16 @@ typedef struct Material_struct Material;
 typedef struct Camera_struct Camera;
 typedef struct Canvas_struct Canvas;
 
-#include "lib/data_structs/vector.h"
-#include "lib/data_structs/ray.h"
-#include "lib/data_structs/linked_list.h"
-#include "lib/data_structs/color.h"
+#include "psyrender/data_structs/vector.h"
+#include "psyrender/data_structs/ray.h"
+#include "psyrender/data_structs/linked_list.h"
+#include "psyrender/data_structs/color.h"
 
-#include "lib/scene.h"
-#include "lib/material.h"
-#include "lib/object.h"
-#include "lib/camera.h"
-#include "lib/canvas.h"
-#include "lib/render_method.h"
+#include "psyrender/scene.h"
+#include "psyrender/material.h"
+#include "psyrender/object.h"
+#include "psyrender/camera.h"
+#include "psyrender/canvas.h"
+#include "psyrender/render_method.h"
 
 #endif

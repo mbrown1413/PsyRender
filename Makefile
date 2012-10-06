@@ -9,7 +9,7 @@ LIB_OBJECTS=$(patsubst %.c, %.o, $(LIB_SRC))
 INCLUDE_DIRS=$(patsubst lib/%, include/%, LIB_DIRS)
 INCLUDES=$(foreach DIR, $(INCLUDE_DIRS), $(wildcard $(DIR)/*.h))
 
-CFLAGS+=-I./ --std=c99 -Werror -Wall -pedantic -lm
+CFLAGS+=-I./include/ --std=c99 -Werror -Wall -pedantic -lm
 CFLAGS+=$(shell pkg-config libpng12 --cflags)
 CFLAGS+=-g
 CFLAGS+=-O3
