@@ -291,6 +291,6 @@ epub_copyright = u'2012, Michael Brown'
 
 todo_include_todos = True
 
-autoc_base_path = os.path.abspath('../../')
+autoc_base_path = os.path.abspath('../../include/psyrender/')
 
 graphviz_output_format = "svg"

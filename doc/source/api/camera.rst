@@ -2,4 +2,4 @@
 Camera
 =====================================
 
-.. autocfile:: lib/object.h
+.. autocfile:: object.h

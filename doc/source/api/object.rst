@@ -2,4 +2,4 @@
 Object
 =====================================
 
-.. autocfile:: lib/object.h
+.. autocfile:: object.h

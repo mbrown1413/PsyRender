@@ -2,4 +2,4 @@
 Vector
 =====================================
 
-.. autocfile:: lib/data_structs/vector.h
+.. autocfile:: data_structs/vector.h

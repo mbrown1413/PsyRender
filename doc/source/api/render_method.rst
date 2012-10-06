@@ -2,4 +2,4 @@
 Render Method
 =====================================
 
-.. autocfile:: lib/render_method.h
+.. autocfile:: render_method.h

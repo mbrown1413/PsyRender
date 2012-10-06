@@ -2,4 +2,4 @@
 Scene
 =====================================
 
-.. autocfile:: lib/scene.h
+.. autocfile:: scene.h

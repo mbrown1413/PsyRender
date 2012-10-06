@@ -2,4 +2,4 @@
 Material
 =====================================
 
-.. autocfile:: lib/material.h
+.. autocfile:: material.h

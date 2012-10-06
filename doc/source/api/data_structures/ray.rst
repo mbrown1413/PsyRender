@@ -2,4 +2,4 @@
 Ray
 =====================================
 
-.. autocfile:: lib/data_structs/ray.h
+.. autocfile:: data_structs/ray.h

@@ -2,4 +2,4 @@
 Canvas
 =====================================
 
-.. autocfile:: lib/canvas.h
+.. autocfile:: canvas.h
