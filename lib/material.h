@@ -1,3 +1,6 @@
+/**
+ * .. todo:: Material Documentation
+ */
 
 #ifndef _RAY_MATERIAL_H
 #define _RAY_MATERIAL_H

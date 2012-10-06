@@ -1,3 +1,6 @@
+/**
+ * .. todo:: Document Color
+ */
 
 #ifndef _RAY_COLOR_H
 #define _RAY_COLOR_H

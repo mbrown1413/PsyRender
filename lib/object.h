@@ -1,3 +1,8 @@
+/**
+ * A physical object that can be rendered.
+ *
+ * .. todo:: Object interface
+ */
 
 #ifndef _RAY_OBJECT_H
 #define _RAY_OBJECT_H

@@ -1,3 +1,6 @@
+/**
+ * .. todo:: Document Vector
+ */
 
 #ifndef _RAY_VECTOR_H
 #define _RAY_VECTOR_H

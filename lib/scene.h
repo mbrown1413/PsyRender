@@ -1,3 +1,6 @@
+/**
+ * .. todo:: Scene Documentation
+ */
 
 #ifndef _RAY_SCENE_H
 #define _RAY_SCENE_H

@@ -1,8 +1,8 @@
 /**
- * Canvas
- *
  * A canvas contains the properties of an image such as width and height, and
- * handles writing the image to some medium such as a png file.
+ * handles writing the image to some medium such as an image file.
+ *
+ * .. todo:: Canvas Interface
  */
 
 #ifndef _RAY_CANVAS_H

@@ -1,3 +1,6 @@
+/**
+ * .. todo:: Render Method Documentation
+ */
 
 #ifndef _RAY_RENDER_METHOD_H
 #define _RAY_RENDER_METHOD_H
