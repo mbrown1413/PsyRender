@@ -2,8 +2,8 @@
  * .. todo:: Scene Documentation
  */
 
-#ifndef _RAY_SCENE_H
-#define _RAY_SCENE_H
+#ifndef _PSY_SCENE_H
+#define _PSY_SCENE_H
 
 typedef struct {
     List* objects;

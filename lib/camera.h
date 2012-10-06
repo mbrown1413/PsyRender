@@ -5,8 +5,8 @@
  * .. todo:: Object interface
  */
 
-#ifndef _RAY_CAMERA_H
-#define _RAY_CAMERA_H
+#ifndef _PSY_CAMERA_H
+#define _PSY_CAMERA_H
 
 #define CAMERA_HEADER \
     struct camera_func_table func; \

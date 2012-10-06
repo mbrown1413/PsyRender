@@ -1,5 +1,5 @@
 
-#include "ray.h"
+#include "psyrender.h"
 
 #include <stdlib.h>
 #include <math.h>

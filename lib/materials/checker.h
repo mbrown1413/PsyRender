@@ -1,6 +1,6 @@
 
-#ifndef _RAY_MATERIAL_CHECKER_H
-#define _RAY_MATERIAL_CHECKER_H
+#ifndef _PSY_MATERIAL_CHECKER_H
+#define _PSY_MATERIAL_CHECKER_H
 
 typedef struct {
     MATERIAL_HEADER

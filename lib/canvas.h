@@ -5,8 +5,8 @@
  * .. todo:: Canvas Interface
  */
 
-#ifndef _RAY_CANVAS_H
-#define _RAY_CANVAS_H
+#ifndef _PSY_CANVAS_H
+#define _PSY_CANVAS_H
 
 #include <stdbool.h>
 

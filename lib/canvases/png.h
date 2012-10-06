@@ -1,6 +1,6 @@
 
-#ifndef _RAY_CANVASES_PNG_H
-#define _RAY_CANVASES_PNG_H
+#ifndef _PSY_CANVASES_PNG_H
+#define _PSY_CANVASES_PNG_H
 
 #include <stdio.h>
 

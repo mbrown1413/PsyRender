@@ -7,7 +7,7 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 
-#include "ray.h"
+#include "psyrender.h"
 
 #define ZOOM_FACTOR 3
 

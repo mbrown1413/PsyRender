@@ -1,7 +1,7 @@
 
 #include <stdlib.h>
 
-#include "ray.h"
+#include "psyrender.h"
 
 Material* Material_Solid_new() {
     Material_Solid* m = (Material_Solid*) malloc(sizeof(Material_Solid));

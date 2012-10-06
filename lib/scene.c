@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "ray.h"
+#include "psyrender.h"
 
 Scene* Scene_new() {
     Scene* s = (Scene*) malloc(sizeof(Scene));

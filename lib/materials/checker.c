@@ -1,7 +1,7 @@
 
 #include <math.h>
 
-#include "ray.h"
+#include "psyrender.h"
 
 Material* Material_Checker_new(unsigned int scale) {
     Material_Checker* m = (Material_Checker*) malloc(sizeof(Material_Checker));

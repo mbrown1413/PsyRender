@@ -1,6 +1,6 @@
 
-#ifndef _RAY_CAMERA_BASIC_H
-#define _RAY_CAMERA_BASIC_H
+#ifndef _PSY_CAMERA_BASIC_H
+#define _PSY_CAMERA_BASIC_H
 
 typedef struct {
     CAMERA_HEADER

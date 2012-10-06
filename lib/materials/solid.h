@@ -1,6 +1,6 @@
 
-#ifndef _RAY_MATERIAL_SOLID_H
-#define _RAY_MATERIAL_SOLID_H
+#ifndef _PSY_MATERIAL_SOLID_H
+#define _PSY_MATERIAL_SOLID_H
 
 typedef struct {
     MATERIAL_HEADER

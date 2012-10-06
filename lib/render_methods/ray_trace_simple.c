@@ -1,5 +1,5 @@
 
-#include "ray.h"
+#include "psyrender.h"
 
 Color trace_ray(const Scene* scene, const Ray* _r, unsigned int depth, double n1);
 Object* ray_intersect(const Scene* scene, const Ray* r, Point* intersect);

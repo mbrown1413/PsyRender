@@ -1,6 +1,6 @@
 
-#ifndef _RAY_CANVAS_MEM
-#define _RAY_CANVAS_MEM
+#ifndef _PSY_CANVAS_MEM
+#define _PSY_CANVAS_MEM
 
 typedef struct {
     CANVAS_HEADER

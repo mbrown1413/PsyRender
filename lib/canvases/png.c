@@ -4,7 +4,7 @@
 
 #include <png.h>
 
-#include "ray.h"
+#include "psyrender.h"
 
 Canvas* Canvas_Png_new(const char* filename, unsigned int width, unsigned int height) {
     Canvas_Png* canvas = (Canvas_Png*) malloc(sizeof(Canvas_Png));

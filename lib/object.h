@@ -4,8 +4,8 @@
  * .. todo:: Object interface
  */
 
-#ifndef _RAY_OBJECT_H
-#define _RAY_OBJECT_H
+#ifndef _PSY_OBJECT_H
+#define _PSY_OBJECT_H
 
 #include <stdbool.h>
 #include <stdlib.h>

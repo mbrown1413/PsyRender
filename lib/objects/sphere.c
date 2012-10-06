@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <math.h>
 
-#include "ray.h"
+#include "psyrender.h"
 
 Sphere* Sphere_new(double x, double y, double z, double radius) {
     Sphere* s = (Sphere*) malloc(sizeof(Sphere));

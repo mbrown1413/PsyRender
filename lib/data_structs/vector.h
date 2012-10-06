@@ -2,14 +2,14 @@
  * .. todo:: Document Vector
  */
 
-#ifndef _RAY_VECTOR_H
-#define _RAY_VECTOR_H
+#ifndef _PSY_VECTOR_H
+#define _PSY_VECTOR_H
 
-void ray_reflect(
-        Ray* result,
-        const Ray* r,
-        const Point* intersect,
-        const Vector* norm);
+typedef struct {
+    double x, y, z;
+} Vector;
+
+typedef Vector Point;
 
 void Vector_cross(Vector* result, const Vector* a, const Vector* b);
 double Vector_mag(const Vector* v);

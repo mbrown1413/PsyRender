@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "ray.h"
+#include "psyrender.h"
 
 Plane* Plane_new(double z) {
     Plane* p = (Plane*) malloc(sizeof(Plane));

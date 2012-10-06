@@ -2,8 +2,8 @@
  * .. todo:: Material Documentation
  */
 
-#ifndef _RAY_MATERIAL_H
-#define _RAY_MATERIAL_H
+#ifndef _PSY_MATERIAL_H
+#define _PSY_MATERIAL_H
 
 #define MATERIAL_HEADER \
     struct material_func_table func; \

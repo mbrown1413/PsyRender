@@ -2,8 +2,8 @@
  * .. todo:: Document Color
  */
 
-#ifndef _RAY_COLOR_H
-#define _RAY_COLOR_H
+#ifndef _PSY_COLOR_H
+#define _PSY_COLOR_H
 
 typedef struct {
     unsigned char r;

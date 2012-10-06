@@ -1,6 +1,6 @@
 
-#ifndef _RAY_H
-#define _RAY_H
+#ifndef _PSY_H
+#define _PSY_H
 
 #include <math.h>
 
@@ -10,8 +10,8 @@
     #define PI 3.141592653589793238462643383279
 #endif
 
-// Guess at the maximum floating point error.  Used for comparing floating
-// point numbers.
+// Guess at the maximum floating point rounding error.  Used for comparing
+// floating point numbers.
 #define EPSILON ( 1.0e-5 )
 
 // Index of refraction for the medium that contains no objects.
@@ -19,17 +19,6 @@
 
 #define MIN(a, b) ( (a)<(b) ? (a) : (b) )
 #define MAX(a, b) ( (a)>(b) ? (a) : (b) )
-
-typedef struct {
-    double x, y, z;
-} Vector;
-
-typedef Vector Point;
-
-typedef struct {
-    Point o;  // Origin
-    Vector d;  // Direction
-} Ray;
 
 // These typedefs resolve any circular dependancies between types.
 struct RenderMeth_struct;
@@ -44,6 +33,7 @@ typedef struct Camera_struct Camera;
 typedef struct Canvas_struct Canvas;
 
 #include "lib/data_structs/vector.h"
+#include "lib/data_structs/ray.h"
 #include "lib/data_structs/linked_list.h"
 #include "lib/data_structs/color.h"
 

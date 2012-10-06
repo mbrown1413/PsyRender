@@ -1,6 +1,6 @@
 
-#ifndef _RAY_OBJ_SPHERE_H
-#define _RAY_OBJ_SPHERE_H
+#ifndef _PSY_OBJ_SPHERE_H
+#define _PSY_OBJ_SPHERE_H
 
 typedef struct {
     OBJECT_HEADER

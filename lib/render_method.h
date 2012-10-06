@@ -2,8 +2,8 @@
  * .. todo:: Render Method Documentation
  */
 
-#ifndef _RAY_RENDER_METHOD_H
-#define _RAY_RENDER_METHOD_H
+#ifndef _PSY_RENDER_METHOD_H
+#define _PSY_RENDER_METHOD_H
 
 #define RENDERMETH_HEADER \
     struct render_meth_func_table func;

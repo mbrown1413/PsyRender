@@ -1,5 +1,5 @@
 
-#include "ray.h"
+#include "psyrender.h"
 
 void Object_set_material(Object* obj, Material* mat) {
     Material_free(obj->mat);

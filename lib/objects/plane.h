@@ -1,6 +1,6 @@
 
-#ifndef _RAY_OBJ_PLANE_H
-#define _RAY_OBJ_PLANE_H
+#ifndef _PSY_OBJ_PLANE_H
+#define _PSY_OBJ_PLANE_H
 
 typedef struct {
     OBJECT_HEADER

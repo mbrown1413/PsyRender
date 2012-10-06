@@ -1,5 +1,5 @@
 
-#include "ray.h"
+#include "psyrender.h"
 
 void Color_add(Color* result, const Color* c1, const Color* c2) {
     result->r = MIN(255, c1->r + c2->r);

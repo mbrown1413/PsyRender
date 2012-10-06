@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 
-#include "ray.h"
+#include "psyrender.h"
 
 Canvas* Canvas_Mem_new(unsigned int width, unsigned int height) {
     Canvas_Mem* canvas = (Canvas_Mem*) malloc(sizeof(Canvas_Mem));
