@@ -6,21 +6,21 @@
 
 #include "psyrender.h"
 
-Sphere* Sphere_new(double x, double y, double z, double radius) {
-    Sphere* s = (Sphere*) malloc(sizeof(Sphere));
+Object* Object_Sphere_new(double x, double y, double z, double radius) {
+    Object_Sphere* s = (Object_Sphere*) malloc(sizeof(Object_Sphere));
     s->pos = (Point) {x, y, z};
     s->r = radius;
-    s->func.ray_intersect = Sphere_ray_intersect;
-    s->func.normal = Sphere_normal;
-    s->func.inside = Sphere_inside;
+    s->func.ray_intersect = Object_Sphere_ray_intersect;
+    s->func.normal = Object_Sphere_normal;
+    s->func.inside = Object_Sphere_inside;
     s->mat = Material_new_default();
-    return s;
+    return (Object*) s;
 }
 
 //TODO: Optimize and comment.  Get rid of precision issues as described here:
 //      http://wiki.cgsociety.org/index.php/Ray_Sphere_Intersection
-bool Sphere_ray_intersect(const Object* obj, const Ray* r, Point* intersect) {
-    const Sphere* s = (Sphere*) obj;
+bool Object_Sphere_ray_intersect(const Object* obj, const Ray* r, Point* intersect) {
+    const Object_Sphere* s = (Object_Sphere*) obj;
     Vector ray_origin;
 
     Vector_subtract(&ray_origin, &r->o, &s->pos);
@@ -67,12 +67,12 @@ bool Sphere_ray_intersect(const Object* obj, const Ray* r, Point* intersect) {
     return true;
 }
 
-void Sphere_normal(const Object* obj, const Point* intersect, Vector* normal) {
-    Sphere* s = (Sphere*) obj;
+void Object_Sphere_normal(const Object* obj, const Point* intersect, Vector* normal) {
+    Object_Sphere* s = (Object_Sphere*) obj;
     Vector_subtract(normal, intersect, &s->pos);
 }
 
-bool Sphere_inside(const Object* obj, const Point* point) {
-    Sphere* s = (Sphere*) obj;
+bool Object_Sphere_inside(const Object* obj, const Point* point) {
+    Object_Sphere* s = (Object_Sphere*) obj;
     return Vector_dist_squared(&s->pos, point) <= s->r * s->r + EPSILON;
 }

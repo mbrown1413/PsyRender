@@ -110,14 +110,14 @@ void draw() {
 
 int main(int argc, char** argv) {
     Material_Solid* mat_basic;
-    Sphere* sphere;
-    Plane* plane;
+    Object* sphere;
+    Object* plane;
 
     render_method = RenderMeth_RayTraceSimple_new();
 
     scene = Scene_new();
 
-    sphere = Sphere_new(2, 5, -1, 1);
+    sphere = Object_Sphere_new(2, 5, -1, 1);
     mat_basic = (Material_Solid*) sphere->mat;
     mat_basic->color = (Color) {255, 0, 0};
     mat_basic->diffuse = 0.4;
@@ -125,7 +125,7 @@ int main(int argc, char** argv) {
     mat_basic->reflective = 0.9;
     Scene_add_object(scene, (Object*) sphere);
 
-    sphere = Sphere_new(-2, 7, -1, 1);
+    sphere = Object_Sphere_new(-2, 7, -1, 1);
     mat_basic = (Material_Solid*) sphere->mat;
     mat_basic->color = (Color) {0, 0, 255};
     mat_basic->diffuse = 0.4;
@@ -133,7 +133,7 @@ int main(int argc, char** argv) {
     mat_basic->reflective = 0.9;
     Scene_add_object(scene, (Object*) sphere);
 
-    sphere = Sphere_new(0, 10, 1, 3);
+    sphere = Object_Sphere_new(0, 10, 1, 3);
     mat_basic = (Material_Solid*) sphere->mat;
     mat_basic->color = (Color) {0, 255, 0};
     mat_basic->diffuse = 0.4;
@@ -141,7 +141,7 @@ int main(int argc, char** argv) {
     mat_basic->reflective = 0.9;
     Scene_add_object(scene, (Object*) sphere);
 
-    plane = Plane_new(-2);
+    plane = Object_Plane_new(-2);
     Object_set_material((Object*) plane, Material_Checker_new(2));
     plane->mat->ambient = 0.0;
     plane->mat->diffuse = .5;

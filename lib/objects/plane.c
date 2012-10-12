@@ -4,19 +4,19 @@
 
 #include "psyrender.h"
 
-Plane* Plane_new(double z) {
-    Plane* p = (Plane*) malloc(sizeof(Plane));
+Object* Object_Plane_new(double z) {
+    Object_Plane* p = (Object_Plane*) malloc(sizeof(Object_Plane));
     p->point = (Point) {0, 0, z};
     p->norm = (Vector) {0, 0, 1};
     p->mat = Material_new_default();
-    p->func.ray_intersect = Plane_ray_intersect;
-    p->func.normal = Plane_normal;
-    p->func.inside = Plane_inside;
-    return p;
+    p->func.ray_intersect = Object_Plane_ray_intersect;
+    p->func.normal = Object_Plane_normal;
+    p->func.inside = Object_Plane_inside;
+    return (Object*) p;
 }
 
-bool Plane_ray_intersect(const Object* obj, const Ray* r, Point* intersect) {
-    Plane* p = (Plane*) obj;
+bool Object_Plane_ray_intersect(const Object* obj, const Ray* r, Point* intersect) {
+    Object_Plane* p = (Object_Plane*) obj;
     Vector tmp_vector;
 
     double denominator = Vector_dot(&p->norm, &r->d);
@@ -40,12 +40,12 @@ bool Plane_ray_intersect(const Object* obj, const Ray* r, Point* intersect) {
     return true;
 }
 
-void Plane_normal(const Object* obj, const Point* intersect, Vector* normal) {
+void Object_Plane_normal(const Object* obj, const Point* intersect, Vector* normal) {
     normal->x = 0;
     normal->y = 0;
     normal->z = 1;
 }
 
-bool Plane_inside(const Object* obj, const Point* point) {
+bool Object_Plane_inside(const Object* obj, const Point* point) {
     return true;
 }
