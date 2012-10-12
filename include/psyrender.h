@@ -20,6 +20,10 @@
 #define MIN(a, b) ( (a)<(b) ? (a) : (b) )
 #define MAX(a, b) ( (a)>(b) ? (a) : (b) )
 
+// Used to define interface functions
+#define INTERFACE_CALL_FUNC(type, to_call, instance, ...) (instance)->func.to_call((type*) instance, __VA_ARGS__)
+#define INTERFACE_CALL_FUNC_NO_ARGS(type, to_call, instance) (instance)->func.to_call((type*) instance)
+
 // These typedefs resolve any circular dependancies between types.
 struct RenderMeth_struct;
 struct Object_struct;

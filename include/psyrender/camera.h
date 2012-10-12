@@ -20,7 +20,8 @@ struct Camera_struct {
     CAMERA_HEADER
 };
 
-#define Camera_map(cam, x, y, r) (cam)->func.map((Camera*) cam, x, y, r)
+
+#define Camera_map(...) INTERFACE_CALL_FUNC(Camera, map, __VA_ARGS__)
 #define Camera_free(cam) free(cam)
 
 #include "cameras/basic.h"

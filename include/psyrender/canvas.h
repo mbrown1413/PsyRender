@@ -57,11 +57,11 @@ struct Canvas_struct {
     CANVAS_HEADER
 };
 
-#define Canvas_start(canvas) (canvas)->func.start((Canvas*) canvas)
-#define Canvas_get_next_row(canvas) (canvas)->func.get_next_row((Canvas*) canvas)
-#define Canvas_write_row(canvas, row) (canvas)->func.write_row((Canvas*) canvas, row)
-#define Canvas_finish(canvas) (canvas)->func.finish((Canvas*) canvas)
-#define Canvas_free(canvas) (canvas)->func.free((Canvas*) canvas)
+#define Canvas_start(canvas) INTERFACE_CALL_FUNC_NO_ARGS(Canvas, start, canvas)
+#define Canvas_get_next_row(canvas) INTERFACE_CALL_FUNC_NO_ARGS(Canvas, get_next_row, canvas)
+#define Canvas_write_row(canvas, ...) INTERFACE_CALL_FUNC(Canvas, write_row, canvas, __VA_ARGS__)
+#define Canvas_finish(canvas) INTERFACE_CALL_FUNC_NO_ARGS(Canvas, finish, canvas)
+#define Canvas_free(canvas) INTERFACE_CALL_FUNC_NO_ARGS(Canvas, free, canvas)
 
 #include "canvases/png.h"
 #include "canvases/mem.h"

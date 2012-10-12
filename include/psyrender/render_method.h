@@ -16,7 +16,7 @@ struct RenderMeth_struct {
     RENDERMETH_HEADER
 };
 
-#define RenderMeth_render(r, scene, cam, canvas) r->func.render((RenderMeth*) r, scene, cam, canvas)
+#define RenderMeth_render(...) INTERFACE_CALL_FUNC(RenderMeth, render, __VA_ARGS__)
 
 #include "render_methods/ray_trace_simple.h"
 
