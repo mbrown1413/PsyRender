@@ -15,11 +15,7 @@ Canvas* Canvas_Png_new(const char* filename, unsigned int width, unsigned int he
     }
     canvas->width = width;
     canvas->height = height;
-    canvas->func.start = Canvas_Png_start;
-    canvas->func.get_next_row = Canvas_Png_get_next_row;
-    canvas->func.write_row = Canvas_Png_write_row;
-    canvas->func.finish = Canvas_Png_finish;
-    canvas->func.free = Canvas_Png_free;
+    canvas->func = canvas_png_func_table;
     return (Canvas*) canvas;
 }
 

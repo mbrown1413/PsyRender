@@ -9,4 +9,8 @@ typedef struct {
 RenderMeth* RenderMeth_RayTraceSimple_new();
 bool RenderMeth_RayTraceSimple_render(RenderMeth* meth, Scene* scene, Camera* cam, Canvas* canvas);
 
+static const struct rendermeth_func_table rendermeth_raytracesimple_func_table = {
+    *RenderMeth_RayTraceSimple_render
+};
+
 #endif

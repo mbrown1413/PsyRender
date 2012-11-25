@@ -14,4 +14,10 @@ bool Object_Sphere_ray_intersect(const Object* obj, const Ray* r, Point* interse
 void Object_Sphere_normal(const Object* obj, const Point* intersect, Vector* normal);
 bool Object_Sphere_inside(const Object* obj, const Point* point);
 
+static const struct object_func_table object_sphere_func_table = {
+    *Object_Sphere_ray_intersect,
+    *Object_Sphere_normal,
+    *Object_Sphere_inside
+};
+
 #endif

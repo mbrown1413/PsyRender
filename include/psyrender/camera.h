@@ -1,5 +1,5 @@
 /**
- * A camera defines the location and projection of the image.  It maps two
+ * A camera defines the location and projection of the image. It maps two
  * floating point coordinates (x and y both from 0-1) to a ray.
  *
  * .. todo:: Object interface

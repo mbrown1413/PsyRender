@@ -8,7 +8,7 @@
 
 Camera_Basic* Camera_Basic_new(Point pos) {
     Camera_Basic* cam = (Camera_Basic*) malloc(sizeof(Camera_Basic));
-    cam->func.map = Camera_Basic_map;
+    cam->func = camera_basic_func_table;
     cam->pos = pos;
     cam->forward = (Vector) {0, 1, 0};
     cam->up = (Vector) {0, 0, 1};

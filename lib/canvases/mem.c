@@ -5,14 +5,10 @@
 
 Canvas* Canvas_Mem_new(unsigned int width, unsigned int height) {
     Canvas_Mem* canvas = (Canvas_Mem*) malloc(sizeof(Canvas_Mem));
+    canvas->func = canvas_mem_func_table;
     canvas->image = NULL;
     canvas->width = width;
     canvas->height = height;
-    canvas->func.start = Canvas_Mem_start;
-    canvas->func.get_next_row = Canvas_Mem_get_next_row;
-    canvas->func.write_row = Canvas_Mem_write_row;
-    canvas->func.finish = Canvas_Mem_finish;
-    canvas->func.free = Canvas_Mem_free;
     return (Canvas*) canvas;
 }
 

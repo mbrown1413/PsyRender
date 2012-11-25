@@ -5,12 +5,12 @@
 
 Material* Material_Solid_new() {
     Material_Solid* m = (Material_Solid*) malloc(sizeof(Material_Solid));
+    m->func = material_solid_func_table;
     m->color = (Color) {255, 255, 255};
     m->diffuse = 1;
     m->ambient = 1;
     m->reflective = 0;
     m->refractive = 0;
-    m->func.ray_hit = Material_Solid_ray_hit;
     return (Material*) m;
 }
 

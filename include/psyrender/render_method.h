@@ -6,9 +6,9 @@
 #define _PSY_RENDER_METHOD_H
 
 #define RENDERMETH_HEADER \
-    struct render_meth_func_table func;
+    struct rendermeth_func_table func;
 
-struct render_meth_func_table {
+struct rendermeth_func_table {
     bool (*render)(RenderMeth* meth, Scene* scene, Camera* camera, Canvas* canvas);
 };
 

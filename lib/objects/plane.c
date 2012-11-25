@@ -6,12 +6,10 @@
 
 Object* Object_Plane_new(double z) {
     Object_Plane* p = (Object_Plane*) malloc(sizeof(Object_Plane));
+    p->func = object_plane_func_table;
     p->point = (Point) {0, 0, z};
     p->norm = (Vector) {0, 0, 1};
     p->mat = Material_new_default();
-    p->func.ray_intersect = Object_Plane_ray_intersect;
-    p->func.normal = Object_Plane_normal;
-    p->func.inside = Object_Plane_inside;
     return (Object*) p;
 }
 

@@ -21,4 +21,12 @@ bool Canvas_Png_write_row(Canvas* _canvas, Color* row);
 bool Canvas_Png_finish(Canvas* _canvas);
 void Canvas_Png_free(Canvas* canvas);
 
+static const struct canvas_func_table canvas_png_func_table = {
+    *Canvas_Png_start,
+    *Canvas_Png_get_next_row,
+    *Canvas_Png_write_row,
+    *Canvas_Png_finish,
+    *Canvas_Png_free
+};
+
 #endif

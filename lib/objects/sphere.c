@@ -8,11 +8,9 @@
 
 Object* Object_Sphere_new(double x, double y, double z, double radius) {
     Object_Sphere* s = (Object_Sphere*) malloc(sizeof(Object_Sphere));
+    s->func = object_sphere_func_table;
     s->pos = (Point) {x, y, z};
     s->r = radius;
-    s->func.ray_intersect = Object_Sphere_ray_intersect;
-    s->func.normal = Object_Sphere_normal;
-    s->func.inside = Object_Sphere_inside;
     s->mat = Material_new_default();
     return (Object*) s;
 }

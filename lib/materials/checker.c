@@ -5,12 +5,12 @@
 
 Material* Material_Checker_new(unsigned int scale) {
     Material_Checker* m = (Material_Checker*) malloc(sizeof(Material_Checker));
+    m->func = material_checker_func_table;
     m->scale = scale;
     m->diffuse = 1;
     m->ambient = 1;
     m->reflective = 0;
     m->refractive = 0;
-    m->func.ray_hit = Material_Checker_ray_hit;
     return (Material*) m;
 }
 

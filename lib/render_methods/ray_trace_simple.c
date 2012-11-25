@@ -6,7 +6,7 @@ Object* ray_intersect(const Scene* scene, const Ray* r, Point* intersect);
 
 RenderMeth* RenderMeth_RayTraceSimple_new() {
     RenderMeth_RayTraceSimple* render_meth = (RenderMeth_RayTraceSimple*) malloc(sizeof(RenderMeth_RayTraceSimple));
-    render_meth->func.render = RenderMeth_RayTraceSimple_render;
+    render_meth->func = rendermeth_raytracesimple_func_table;
     return (RenderMeth*) render_meth;
 }
 

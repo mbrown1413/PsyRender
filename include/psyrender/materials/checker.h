@@ -16,4 +16,8 @@ Color Material_Checker_ray_hit(
         Vector* norm,
         unsigned int depth);
 
+static const struct material_func_table material_checker_func_table = {
+    *Material_Checker_ray_hit
+};
+
 #endif
