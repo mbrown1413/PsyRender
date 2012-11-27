@@ -1,3 +1,10 @@
+/**
+ *
+ * .. c:type: Canvas_Mem
+ *
+ * .. todo:: Document Mem Canvas
+ *
+ */
 
 #ifndef _PSY_CANVAS_MEM
 #define _PSY_CANVAS_MEM

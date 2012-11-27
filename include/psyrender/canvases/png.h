@@ -1,3 +1,10 @@
+/**
+ *
+ * .. c:type: Canvas_Png
+ *
+ * .. todo:: Document PNG Canvas
+ *
+ */
 
 #ifndef _PSY_CANVASES_PNG_H
 #define _PSY_CANVASES_PNG_H
