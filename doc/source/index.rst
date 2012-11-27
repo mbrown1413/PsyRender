@@ -16,9 +16,10 @@ Development Documentation
 
 .. toctree::
     :maxdepth: 3
+    :titlesonly:
 
     dev/start
-    dev/classes
+    dev/interfaces
     dev/render
     dev/api/index
 
