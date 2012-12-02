@@ -18,3 +18,15 @@ void Color_scalar_mult(Color* result, const Color* c, double value) {
     result->g = MIN(255, c->g * value);
     result->b = MIN(255, c->b * value);
 }
+
+void Color_mult(Color* result, const Color* a, const Color* b) {
+    result->r = a->r * b->r;
+    result->g = a->g * b->g;
+    result->b = a->b * b->b;
+}
+
+bool Color_is_black(const Color* c) {
+    return c->r == 0 &&
+           c->g == 0 &&
+           c->b == 0;
+}

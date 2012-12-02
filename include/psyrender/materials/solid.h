@@ -4,20 +4,14 @@
 
 typedef struct {
     MATERIAL_HEADER
-    Color color;
+    struct material_transmit transmit;
 } Material_Solid;
 
 Material* Material_Solid_new();
-Color Material_Solid_ray_hit(
-        const Scene* scene,
-        const Material* mat,
-        const Ray* ray,
-        Point* intersect,
-        Vector* norm,
-        unsigned int depth);
+struct material_transmit Material_Solid_get_transmit(const Material* mat, const Object* object, const Point* intersect);
 
 static const struct material_func_table material_solid_func_table = {
-    *Material_Solid_ray_hit
+    *Material_Solid_get_transmit
 };
 
 #endif

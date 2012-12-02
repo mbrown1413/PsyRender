@@ -34,7 +34,7 @@ Color trace_ray(const Scene* scene, const Ray* _r, unsigned int depth, double n1
     Vector norm;
     Object* obj;
     Color result = {0, 0, 0};
-    Color mat_color;
+    struct material_transmit transmit;
     Color tmp_color;
     Ray r, tmp_ray;
 
@@ -49,20 +49,18 @@ Color trace_ray(const Scene* scene, const Ray* _r, unsigned int depth, double n1
     }
 
     Object_normal(obj, &intersect, &norm);
-    Material* mat = obj->mat;
-    mat_color = Material_ray_hit(scene, mat, &r, &intersect, &norm, depth+1);
+    transmit = Material_get_transmit(obj->mat, obj, &intersect);
     Vector_normalize(&norm);
 
     // Ambient
-    Color_scalar_mult(&result, &mat_color, mat->ambient);
+    result = transmit.ambient;
 
     // Diffuse
     Vector light_direction = {1, 0, 1}; // TODO: One hardcoded light for now
     Vector_normalize(&light_direction);
 
-    tmp_color = mat_color;
     double angle_factor = MAX(0, Vector_dot(&light_direction, &norm));
-    Color_scalar_mult(&tmp_color, &tmp_color, mat->diffuse * angle_factor);
+    Color_scalar_mult(&tmp_color, &transmit.diffuse, angle_factor);
     Color_add(&result, &result, &tmp_color);
 
     if (Object_inside(obj, &r.o)) {
@@ -70,15 +68,19 @@ Color trace_ray(const Scene* scene, const Ray* _r, unsigned int depth, double n1
     }
 
     // Reflective
-    if (mat->reflective) {
+    if (!Color_is_black(&transmit.reflect)) {
         ray_reflect(&tmp_ray, &r, &intersect, &norm);
         tmp_color = trace_ray(scene, &tmp_ray, depth+1, n1);
-        Color_scalar_mult(&tmp_color, &tmp_color, mat->reflective);
+        tmp_color = (Color) {
+            tmp_color.r * (transmit.reflect.r / 255.0),
+            tmp_color.g * (transmit.reflect.g / 255.0),
+            tmp_color.b * (transmit.reflect.b / 255.0)
+        };
         Color_add(&result, &result, &tmp_color);
     }
 
     // Refractive
-    if (mat->refractive) {
+    if (!Color_is_black(&transmit.refract)) {
         Vector tmp_vector;
         Vector refracted;
         double n2;
@@ -104,7 +106,7 @@ Color trace_ray(const Scene* scene, const Ray* _r, unsigned int depth, double n1
             Vector_assign(&tmp_ray.d, &refracted);
 
             tmp_color = trace_ray(scene, &tmp_ray, depth+1, n2);
-            Color_scalar_mult(&tmp_color, &tmp_color, mat->refractive);
+            Color_mult(&tmp_color, &tmp_color, &transmit.refract);
             Color_add(&result, &result, &tmp_color);
         }
 

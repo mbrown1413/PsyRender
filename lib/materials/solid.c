@@ -6,22 +6,16 @@
 Material* Material_Solid_new() {
     Material_Solid* m = (Material_Solid*) malloc(sizeof(Material_Solid));
     m->func = material_solid_func_table;
-    m->color = (Color) {255, 255, 255};
-    m->diffuse = 1;
-    m->ambient = 1;
-    m->reflective = 0;
-    m->refractive = 0;
+    m->transmit = (struct material_transmit) {
+        {255, 255, 255},
+        {255, 255, 255},
+        {0, 0, 0},
+        {0, 0, 0}
+    };
     return (Material*) m;
 }
 
-Color Material_Solid_ray_hit(
-        const Scene* scene,
-        const Material* mat,
-        const Ray* ray,
-        Point* intersect,
-        Vector* norm,
-        unsigned int depth) {
-
+struct material_transmit Material_Solid_get_transmit(const Material* mat, const Object* object, const Point* intersect) {
     Material_Solid* m = (Material_Solid*) mat;
-    return m->color;
+    return m->transmit;
 }
