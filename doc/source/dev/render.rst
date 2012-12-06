@@ -8,9 +8,9 @@ Rendering Overview
 
     node [shape=Mrecord, style="filled", fillcolor="#aaddff", fontname="Sans"];
 
-    render_method -- scene
-    render_method -- canvas
-    render_method -- camera
+    renderer -- scene
+    renderer -- canvas
+    renderer -- camera
 
     scene -- light
     scene -- object

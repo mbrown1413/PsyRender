@@ -11,5 +11,5 @@ API Reference
     data_structures/index
     material
     object
-    render_method
+    renderer
     scene

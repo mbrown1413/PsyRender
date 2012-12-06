@@ -10,7 +10,7 @@
     #define PI 3.141592653589793238462643383279
 #endif
 
-// Guess at the maximum floating point rounding error.  Used for comparing
+// Guess at the maximum floating point rounding error. Used for comparing
 // floating point numbers.
 #define EPSILON ( 1.0e-5 )
 
@@ -25,12 +25,12 @@
 #define INTERFACE_CALL_FUNC_NO_ARGS(type, to_call, instance) (instance)->func.to_call((type*) instance)
 
 // These typedefs resolve any circular dependancies between types.
-struct RenderMeth_struct;
+struct Renderer_struct;
 struct Object_struct;
 struct Material_struct;
 struct Camera_struct;
 struct Canvas_struct;
-typedef struct RenderMeth_struct RenderMeth;
+typedef struct Renderer_struct Renderer;
 typedef struct Object_struct Object;
 typedef struct Material_struct Material;
 typedef struct Camera_struct Camera;
@@ -46,6 +46,6 @@ typedef struct Canvas_struct Canvas;
 #include "psyrender/object.h"
 #include "psyrender/camera.h"
 #include "psyrender/canvas.h"
-#include "psyrender/render_method.h"
+#include "psyrender/renderer.h"
 
 #endif

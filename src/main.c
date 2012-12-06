@@ -15,7 +15,7 @@ int main() {
 
     Scene* scene = Scene_new();
 
-    RenderMeth* render_method;
+    Renderer* renderer;
 
     sphere = Object_Sphere_new(2, 5, -1, 1);
     mat_solid = (Material_Solid*) sphere->mat;
@@ -57,9 +57,9 @@ int main() {
 
     canvas = Canvas_Png_new("output.png", 1600, 1600);
 
-    render_method = RenderMeth_RayTraceSimple_new();
+    renderer = Renderer_RayTraceSimple_new();
 
-    RenderMeth_render(render_method, scene, camera, (Canvas*) canvas);
+    Renderer_render(renderer, scene, camera, (Canvas*) canvas);
 
     Camera_free(camera);
     Scene_free(scene);

@@ -11,7 +11,7 @@
 
 #define ZOOM_FACTOR 3
 
-RenderMeth* render_method;
+Renderer* renderer;
 Canvas_Mem* canvas;
 Camera* camera = NULL;
 Scene* scene;
@@ -93,7 +93,7 @@ void on_reshape(int w, int h) {
 }
 
 void draw() {
-    RenderMeth_render(render_method, scene, camera, (Canvas*) canvas);
+    Renderer_render(renderer, scene, camera, (Canvas*) canvas);
     Color* image = canvas->image;
     horizontal_flip(image, canvas->width, canvas->height);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -113,7 +113,7 @@ int main(int argc, char** argv) {
     Object* sphere;
     Object* plane;
 
-    render_method = RenderMeth_RayTraceSimple_new();
+    renderer = Renderer_RayTraceSimple_new();
 
     scene = Scene_new();
 

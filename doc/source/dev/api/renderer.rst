@@ -1,0 +1,5 @@
+
+Renderer
+=====================================
+
+.. autocfile:: renderer.h

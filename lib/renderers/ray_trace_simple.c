@@ -4,13 +4,13 @@
 Color trace_ray(const Scene* scene, const Ray* _r, unsigned int depth, double n1);
 Object* ray_intersect(const Scene* scene, const Ray* r, Point* intersect);
 
-RenderMeth* RenderMeth_RayTraceSimple_new() {
-    RenderMeth_RayTraceSimple* render_meth = (RenderMeth_RayTraceSimple*) malloc(sizeof(RenderMeth_RayTraceSimple));
-    render_meth->func = rendermeth_raytracesimple_func_table;
-    return (RenderMeth*) render_meth;
+Renderer* Renderer_RayTraceSimple_new() {
+    Renderer_RayTraceSimple* renderer = (Renderer_RayTraceSimple*) malloc(sizeof(Renderer_RayTraceSimple));
+    renderer->func = renderer_raytracesimple_func_table;
+    return (Renderer*) renderer;
 }
 
-bool RenderMeth_RayTraceSimple_render(RenderMeth* meth, Scene* scene, Camera* cam, Canvas* canvas) {
+bool Renderer_RayTraceSimple_render(Renderer* renderer, Scene* scene, Camera* cam, Canvas* canvas) {
     Color* row;
     Ray ray;
 
