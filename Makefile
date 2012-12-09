@@ -1,35 +1,27 @@
 
-PROGRAM_SRC=$(wildcard src/*.c)
-PROGRAM_EXEC=$(patsubst src/%.c, bin/%, $(PROGRAM_SRC))
-
-LIB_DIRS=lib lib/objects lib/materials lib/canvases lib/cameras lib/data_structs lib/renderers
-LIB_SRC=$(foreach DIR, $(LIB_DIRS), $(wildcard $(DIR)/*.c))
-LIB_OBJECTS=$(patsubst %.c, %.o, $(LIB_SRC))
-
-INCLUDE_DIRS=$(patsubst lib/%, include/%, LIB_DIRS)
-INCLUDES=$(foreach DIR, $(INCLUDE_DIRS), $(wildcard $(DIR)/*.h))
-
-CFLAGS+=-I./include/ --std=c99 -Werror -Wall -pedantic -lm
-CFLAGS+=$(shell pkg-config libpng12 --cflags)
+CFLAGS+=-I./include/ --std=c99 -Werror -Wall -pedantic
 CFLAGS+=-g
 CFLAGS+=-O3
 
-LDFLAGS+=$(shell pkg-config libpng12 --libs)
+LDFLAGS=-lm -Llib/ -lpsyrender
+
+PROGRAM_SRC=$(wildcard src/*.c)
+PROGRAM_EXEC=$(patsubst src/%.c, bin/%, $(PROGRAM_SRC))
 
 
-all: $(PROGRAM_EXEC)
+all: bin/ lib $(PROGRAM_EXEC)
 
-%.o: %.c $(INCLUDES) Makefile
-	$(CC) $(CFLAGS) -c $< -o $@
+bin/%: src/%.c
+	$(CC) $(CFLAGS) $< $(LDFLAGS) $(shell cat $(<:%.c=%.flags) 2>/dev/null) -Wno-missing-prototypes -o $@
 
-bin/%: src/%.c $(LIB_OBJECTS) $(INCLUDES)
-	$(CC) $(CFLAGS) $(LDFLAGS) $(shell cat $(<:%.c=%.flags) 2>/dev/null) -Wno-missing-prototypes $(LIB_OBJECTS) $< -o $@
-
-bin/:
-	-mkdir bin
+lib:
+	$(MAKE) -C lib/
 
 clean:
-	-rm $(LIB_OBJECTS)
-	-rm $(PROGRAM_EXEC)
+	$(MAKE) -C lib/ clean
+	-rm bin/*
 
-.PHONY: all clean
+bin:
+	-mkdir bin/ 2>/dev/null
+
+.PHONY: all clean lib src

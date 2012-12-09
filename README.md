@@ -21,9 +21,11 @@ To compile, use the make command in the top level directory:
 
     $ make
 
-This creates executables in the bin/ directory:
+This compiles a library in `lib/libpsyrender.so` and compiles executables in
+the `bin/` directory. Unless `lib/libpsyrender.so` is installed in a library
+path, you will need to use the `LD_LIBRARY_PATH` to run the executables:
 
-    $ ./bin/interactive
+    $ LD_LIBRARY_PATH=lib/ ./bin/interactive
 
 
 Directory Structure
