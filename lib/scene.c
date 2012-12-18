@@ -17,10 +17,13 @@ void Scene_add_object(Scene* scene, Object* obj) {
 void Scene_free(Scene* s) {
     Object* obj;
 
-    List_start_iteration(s->objects);
-    while ((obj = (Object*) List_next(s->objects))) {
+    ListNode* node = s->objects->head;
+    while (node) {
+        obj = (Object*) node->data;
         Object_free(obj);
+        node = node->next;
     }
+
     List_free(s->objects);
 
     free(s);

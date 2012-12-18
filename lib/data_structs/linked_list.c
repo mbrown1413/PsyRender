@@ -1,6 +1,6 @@
 /**
  * linked_list.c
- * Implements a singly linked list data structure.
+ * A singly linked list data structure.
  *
  * The list stores void pointers, so you can store anything you want.  Remember
  * to free the memory pointed to by the stored pointer before deleting the node
@@ -40,7 +40,6 @@ List* List_new() {
 
     l->head = NULL;
     l->tail = NULL;
-    l->current = NULL;
     l->length = 0;
 
     return l;
@@ -52,7 +51,7 @@ List* List_new() {
  */
 void List_append(List* l, void* data)
 {
-    struct ListNode* node = (struct ListNode*) malloc(sizeof(struct ListNode));
+    ListNode* node = (ListNode*) malloc(sizeof(ListNode));
     node->data = data;
     node->next = NULL;
 
@@ -66,88 +65,6 @@ void List_append(List* l, void* data)
 }
 
 /**
- * List_remove_current
- * Removes the current item in the list.
- *
- * This can be used in conjunction with List_next to remove the last item
- * recieved.
- *
- * Make sure to free the memory of the stored data before calling this
- * function to prevent memory leaks.  Alternatively you could use
- * List_remove_current_and_data().
- */
-void List_remove_current(List* l)
-{
-    if (l->length == 0) return;
-    if (l->current == NULL) return; // Pointing before first or after last
-
-    struct ListNode* to_delete = l->current;
-    if (l->last == NULL) {
-        // The current item is head
-        l->head = l->head->next;
-    } else {
-        l->last->next = l->current->next;
-    }
-
-    l->current = l->last;
-    if (to_delete == l->tail) {
-        // Deleting the last item
-        l->tail = l->current;
-    }
-    free(to_delete);
-    l->length--;
-}
-
-/**
- * List_remove_current_and_data
- * Removes the current item in the list and frees the data pointer.
- *
- * This can be used in conjunction with List_next to remove the last item
- * recieved.
- */
-void List_remove_current_and_data(List* l)
-{
-    if (l->current == NULL) return;
-    free(l->current->data);
-    List_remove_current(l);
-}
-
-/**
- * List_start_iteration
- * Resets the internal current node pointer to the beggining.
- *
- * This can be used in conjunction with List_next to iterate through every item
- * in a list.
- */
-void List_start_iteration(List* l)
-{
-    l->last = NULL;
-    l->current = NULL;
-}
-
-/**
- * List_next
- * Gets the next item in the list.  The internal current node pointer will move
- * forward one.
- */
-void* List_next(List* l) {
-    if (l->head == NULL) return NULL; // Empty list
-    if (l->current == NULL) {
-        // First time List_next has been called after start_iteration.
-        l->current = l->head;
-        return l->current->data;
-    } else {
-        l->last = l->current;
-        l->current = l->current->next;
-        if (l->current == NULL) {
-            return NULL;
-        } else {
-            return l->current->data;
-        }
-    }
-}
-
-/**
  * List_free
  * Free the memory used by the list.
  *
@@ -155,27 +72,12 @@ void* List_next(List* l) {
  * be done by the user.
  */
 void List_free(List* l) {
-    struct ListNode* node = l->head;
-    struct ListNode* next;
+    ListNode* node = l->head;
+    ListNode* next;
     while (node != NULL) {
         next = node->next;
         free(node);
         node = next;
     }
     free(l);
-}
-
-/**
- * List_print
- * Prints the given list to stdout.
- *
- * Note that this resets the iteration.
- */
-void List_print(List* l) {
-    void* item;
-    printf("List:\n");
-    List_start_iteration(l);
-    while ((item = List_next(l))) {
-        printf("  Data at: %p\n", item);
-    }
 }

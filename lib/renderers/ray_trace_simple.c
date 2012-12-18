@@ -118,16 +118,17 @@ Color trace_ray(const Scene* scene, const Ray* _r, unsigned int depth, double n1
 Object* ray_intersect(const Scene* scene, const Ray* r, Point* intersect) {
     Point obj_intersect, closest_intersect={INFINITY, INFINITY, INFINITY};
     double dist, closest_dist = INFINITY;
-    Object* obj;
     Object* closest_obj = NULL;
 
-    List_start_iteration(scene->objects);
-    while ((obj = (Object*) List_next(scene->objects))) {
+    ListNode* node = scene->objects->head;
+    while (node) {
+        Object* obj = (Object*) node->data;
 
         if (Object_ray_intersect(obj, r, &obj_intersect)) {
 
             dist = Vector_dist_squared(&obj_intersect, &r->o);
             if (dist < 100*EPSILON) {
+                node = node->next;
                 continue;
             }
             if (dist < closest_dist) {
@@ -137,6 +138,8 @@ Object* ray_intersect(const Scene* scene, const Ray* r, Point* intersect) {
             }
 
         }
+
+        node = node->next;
     }
     if (closest_obj != NULL) {
         *intersect = closest_intersect;
