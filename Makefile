@@ -9,12 +9,12 @@ PROGRAM_SRC=$(wildcard src/*.c)
 PROGRAM_EXEC=$(patsubst src/%.c, bin/%, $(PROGRAM_SRC))
 
 
-all: bin/ lib $(PROGRAM_EXEC)
+all: bin/ lib/libpsyrender.so $(PROGRAM_EXEC)
 
-bin/%: src/%.c
+bin/%: src/%.c lib/libpsyrender.so
 	$(CC) $(CFLAGS) $< $(LDFLAGS) $(shell cat $(<:%.c=%.flags) 2>/dev/null) -Wno-missing-prototypes -o $@
 
-lib:
+lib/libpsyrender.so: lib/*
 	$(MAKE) -C lib/
 
 clean:
@@ -24,4 +24,4 @@ clean:
 bin:
 	-mkdir bin/ 2>/dev/null
 
-.PHONY: all clean lib src
+.PHONY: all clean src
