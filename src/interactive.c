@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -113,7 +114,7 @@ int main(int argc, char** argv) {
     Object* sphere;
     Object* plane;
 
-    renderer = Renderer_RayTraceSimple_new();
+    renderer = Renderer_RayTraceSimple_new(UINT_MAX);
 
     scene = Scene_new();
 

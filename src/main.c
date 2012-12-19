@@ -57,7 +57,7 @@ int main() {
 
     canvas = Canvas_Png_new("output.png", 1600, 1600);
 
-    renderer = Renderer_RayTraceSimple_new();
+    renderer = Renderer_RayTraceSimple_new(20);
 
     Renderer_render(renderer, scene, camera, (Canvas*) canvas);
 

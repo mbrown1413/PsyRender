@@ -1,16 +1,18 @@
 
 #include "psyrender.h"
 
-Color trace_ray(const Scene* scene, const Ray* _r, unsigned int depth, double n1);
-Object* ray_intersect(const Scene* scene, const Ray* r, Point* intersect);
+static Color trace_ray(Renderer_RayTraceSimple* renderer, const Scene* scene, const Ray* _r, unsigned int depth, double n1);
+static Object* ray_intersect(const Scene* scene, const Ray* r, Point* intersect);
 
-Renderer* Renderer_RayTraceSimple_new() {
+Renderer* Renderer_RayTraceSimple_new(unsigned int max_depth) {
     Renderer_RayTraceSimple* renderer = (Renderer_RayTraceSimple*) malloc(sizeof(Renderer_RayTraceSimple));
     renderer->func = renderer_raytracesimple_func_table;
+    renderer->max_depth = max_depth;
     return (Renderer*) renderer;
 }
 
-bool Renderer_RayTraceSimple_render(Renderer* renderer, Scene* scene, Camera* cam, Canvas* canvas) {
+bool Renderer_RayTraceSimple_render(Renderer* _renderer, Scene* scene, Camera* cam, Canvas* canvas) {
+    Renderer_RayTraceSimple* renderer = (Renderer_RayTraceSimple*) _renderer;
     Color* row;
     Ray ray;
 
@@ -20,7 +22,7 @@ bool Renderer_RayTraceSimple_render(Renderer* renderer, Scene* scene, Camera* ca
         row = Canvas_get_next_row(canvas);
         for (int x=0; x<canvas->width; x++) {
             Camera_map(cam, ((double)x)/canvas->width, ((double)y)/canvas->height, &ray);
-            row[x] = trace_ray(scene, &ray, 0, ETHER_INDEX_OF_REFRACTION);
+            row[x] = trace_ray(renderer, scene, &ray, 0, ETHER_INDEX_OF_REFRACTION);
         }
         Canvas_write_row(canvas, row);
     }
@@ -29,7 +31,7 @@ bool Renderer_RayTraceSimple_render(Renderer* renderer, Scene* scene, Camera* ca
     return true;
 }
 
-Color trace_ray(const Scene* scene, const Ray* _r, unsigned int depth, double n1) {
+static Color trace_ray(Renderer_RayTraceSimple* renderer, const Scene* scene, const Ray* _r, unsigned int depth, double n1) {
     Point intersect;
     Vector norm;
     Object* obj;
@@ -44,7 +46,7 @@ Color trace_ray(const Scene* scene, const Ray* _r, unsigned int depth, double n1
 
     obj = ray_intersect(scene, &r, &intersect);
 
-    if (!obj) {
+    if (!obj || depth > renderer->max_depth) {
         return (Color) {0, 0, 0};
     }
 
@@ -70,7 +72,7 @@ Color trace_ray(const Scene* scene, const Ray* _r, unsigned int depth, double n1
     // Reflective
     if (!Color_is_black(&transmit.reflect)) {
         ray_reflect(&tmp_ray, &r, &intersect, &norm);
-        tmp_color = trace_ray(scene, &tmp_ray, depth+1, n1);
+        tmp_color = trace_ray(renderer, scene, &tmp_ray, depth+1, n1);
         tmp_color = (Color) {
             tmp_color.r * (transmit.reflect.r / 255.0),
             tmp_color.g * (transmit.reflect.g / 255.0),
@@ -105,7 +107,7 @@ Color trace_ray(const Scene* scene, const Ray* _r, unsigned int depth, double n1
             Vector_assign(&tmp_ray.o, &intersect);
             Vector_assign(&tmp_ray.d, &refracted);
 
-            tmp_color = trace_ray(scene, &tmp_ray, depth+1, n2);
+            tmp_color = trace_ray(renderer, scene, &tmp_ray, depth+1, n2);
             Color_mult(&tmp_color, &tmp_color, &transmit.refract);
             Color_add(&result, &result, &tmp_color);
         }
@@ -115,7 +117,7 @@ Color trace_ray(const Scene* scene, const Ray* _r, unsigned int depth, double n1
     return result;
 }
 
-Object* ray_intersect(const Scene* scene, const Ray* r, Point* intersect) {
+static Object* ray_intersect(const Scene* scene, const Ray* r, Point* intersect) {
     Point obj_intersect, closest_intersect={INFINITY, INFINITY, INFINITY};
     double dist, closest_dist = INFINITY;
     Object* closest_obj = NULL;
