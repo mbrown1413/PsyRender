@@ -43,10 +43,10 @@ int main() {
 
     plane = Object_Plane_new(-2);
     Object_set_material((Object*) plane, Material_Checker_new(2));
-    ((Material_Checker*)plane->mat)->tile1_transmit.ambient = (Color) {0, 0, 0};
-    ((Material_Checker*)plane->mat)->tile1_transmit.diffuse = (Color) {0, 0, 0};
+    ((Material_Checker*)plane->mat)->tile1_transmit.ambient = (Color) {255*0.0, 255*0.0, 255*0.0};
+    ((Material_Checker*)plane->mat)->tile1_transmit.diffuse = (Color) {255*0.1, 255*0.1, 255*0.1};
     ((Material_Checker*)plane->mat)->tile1_transmit.reflect = (Color) {255*0.2, 255*0.2, 255*0.2};
-    ((Material_Checker*)plane->mat)->tile2_transmit.ambient = (Color) {0, 0, 0};
+    ((Material_Checker*)plane->mat)->tile2_transmit.ambient = (Color) {127*0.1, 127*0.1, 127*0.1};
     ((Material_Checker*)plane->mat)->tile2_transmit.diffuse = (Color) {127, 127, 127};
     ((Material_Checker*)plane->mat)->tile2_transmit.reflect = (Color) {255*0.2, 255*0.2, 255*0.2};
     Scene_add_object(scene, (Object*) plane);

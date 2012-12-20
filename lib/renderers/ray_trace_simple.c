@@ -61,12 +61,18 @@ static Color trace_ray(Renderer_RayTraceSimple* renderer, const Scene* scene, co
     Vector light_direction = {1, 0, 1}; // TODO: One hardcoded light for now
     Vector_normalize(&light_direction);
 
-    double angle_factor = MAX(0, Vector_dot(&light_direction, &norm));
-    Color_scalar_mult(&tmp_color, &transmit.diffuse, angle_factor);
-    Color_add(&result, &result, &tmp_color);
+    tmp_ray.d = light_direction;
+    tmp_ray.o = intersect;
+    if (!ray_intersect(scene, &tmp_ray, NULL)) {
 
-    if (Object_inside(obj, &r.o)) {
-        Vector_scalar_mult(&norm, &norm, -1);
+        double angle_factor = MAX(0, Vector_dot(&light_direction, &norm));
+        Color_scalar_mult(&tmp_color, &transmit.diffuse, angle_factor);
+        Color_add(&result, &result, &tmp_color);
+
+        if (Object_inside(obj, &r.o)) {
+            Vector_scalar_mult(&norm, &norm, -1);
+        }
+
     }
 
     // Reflective
@@ -129,7 +135,7 @@ static Object* ray_intersect(const Scene* scene, const Ray* r, Point* intersect)
         if (Object_ray_intersect(obj, r, &obj_intersect)) {
 
             dist = Vector_dist_squared(&obj_intersect, &r->o);
-            if (dist < 100*EPSILON) {
+            if (dist < 10*EPSILON) {
                 node = node->next;
                 continue;
             }
@@ -143,7 +149,7 @@ static Object* ray_intersect(const Scene* scene, const Ray* r, Point* intersect)
 
         node = node->next;
     }
-    if (closest_obj != NULL) {
+    if (closest_obj != NULL && intersect) {
         *intersect = closest_intersect;
     }
     return closest_obj;
