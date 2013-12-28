@@ -12,7 +12,7 @@ LIB_CFLAGS=$(CFLAGS) $(shell pkg-config libpng12 --cflags)
 
 LDFLAGS=-L./ -l$(LIB_NAME) -lm $(shell pkg-config libpng12 --libs)
 
-all: library programs
+all: library programs tests
 
 
 ##### Building Library #####
@@ -49,6 +49,21 @@ bin:
 	-mkdir bin/ 2>/dev/null
 
 
+##### Tests #####
+# Compiles each test source in tests/*.c into tests/bin/*
+
+TEST_SRC=$(wildcard tests/*.c)
+TEST_EXEC=$(patsubst tests/%.c, tests/bin/%, $(TEST_SRC))
+
+tests: tests/bin $(LIB_SONAME) $(TEST_EXEC)
+
+tests/bin/%: tests/%.c
+	$(CC) $(CFLAGS) -Itests/ $< $(LDFLAGS) $(shell cat $(<:%.c=%.flags) 2>/dev/null) -o $@
+
+tests/bin:
+	mkdir tests/bin 2>/dev/null
+
+
 ##### Misc #####
 
 clean:
@@ -56,4 +71,4 @@ clean:
 	-rm $(LIB_OBJECTS)
 	-rm bin/*
 
-.PHONY: all clean programs
+.PHONY: all clean programs tests
