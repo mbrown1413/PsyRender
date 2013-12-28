@@ -40,6 +40,7 @@ typedef struct Canvas_struct Canvas;
 #include "psyrender/data_structs/ray.h"
 #include "psyrender/data_structs/linked_list.h"
 #include "psyrender/data_structs/color.h"
+#include "psyrender/data_structs/matrix4x4.h"
 
 #include "psyrender/scene.h"
 #include "psyrender/material.h"
