@@ -3,6 +3,12 @@
 
 #include <math.h>
 
+bool Vector_is_equal(const Vector* v1, const Vector* v2, double epsilon) {
+    return fabs(v1->x - v2->x) <= epsilon &&
+           fabs(v1->y - v2->y) <= epsilon &&
+           fabs(v1->z - v2->z) <= epsilon;
+}
+
 void Vector_cross(Vector* result, const Vector* a, const Vector* b) {
     Vector tmp;
     tmp.x = a->y*b->z - a->z*b->y;

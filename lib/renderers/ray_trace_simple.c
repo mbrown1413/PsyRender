@@ -77,7 +77,7 @@ static Color trace_ray(Renderer_RayTraceSimple* renderer, const Scene* scene, co
 
     // Reflective
     if (!Color_is_black(&transmit.reflect)) {
-        ray_reflect(&tmp_ray, &r, &intersect, &norm);
+        Ray_reflect(&tmp_ray, &r, &intersect, &norm);
         tmp_color = trace_ray(renderer, scene, &tmp_ray, depth+1, n1);
         tmp_color = (Color) {
             tmp_color.r * (transmit.reflect.r / 255.0),

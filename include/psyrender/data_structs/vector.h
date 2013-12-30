@@ -9,8 +9,7 @@ typedef struct {
     double x, y, z;
 } Vector;
 
-typedef Vector Point;
-
+bool Vector_is_equal(const Vector* v1, const Vector* v2, double epsilon);
 void Vector_cross(Vector* result, const Vector* a, const Vector* b);
 double Vector_mag(const Vector* v);
 void Vector_normalize(Vector* v);

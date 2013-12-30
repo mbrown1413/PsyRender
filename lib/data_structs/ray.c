@@ -1,7 +1,12 @@
 
 #include "psyrender.h"
 
-void ray_reflect(
+bool Ray_is_equal(const Ray* r1, const Ray* r2, double epsilon) {
+    return Point_is_equal(&r1->o, &r2->o, epsilon) &&
+           Vector_is_equal(&r1->d, &r2->d, epsilon);
+}
+
+void Ray_reflect(
         Ray* result,
         const Ray* r,
         const Point* intersect,

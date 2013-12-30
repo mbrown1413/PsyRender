@@ -10,10 +10,12 @@ typedef struct {
     Vector d;  // Direction
 } Ray;
 
-void ray_reflect(
+void Ray_reflect(
         Ray* result,
         const Ray* r,
         const Point* intersect,
         const Vector* norm);
+
+bool Ray_is_equal(const Ray* r1, const Ray* r2, double epsilon);
 
 #endif

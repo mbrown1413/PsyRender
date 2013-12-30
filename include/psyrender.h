@@ -3,6 +3,7 @@
 #define _PSY_H
 
 #include <math.h>
+#include <stdbool.h>
 
 #ifdef M_PI
     #define PI M_PI
@@ -37,10 +38,12 @@ typedef struct Camera_struct Camera;
 typedef struct Canvas_struct Canvas;
 
 #include "psyrender/data_structs/vector.h"
+#include "psyrender/data_structs/point.h"
 #include "psyrender/data_structs/ray.h"
 #include "psyrender/data_structs/linked_list.h"
 #include "psyrender/data_structs/color.h"
 #include "psyrender/data_structs/matrix4x4.h"
+#include "psyrender/data_structs/transform.h"
 
 #include "psyrender/scene.h"
 #include "psyrender/material.h"

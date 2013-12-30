@@ -41,6 +41,24 @@ void Matrix4x4_set(Matrix4x4 m,
     m[3][3] = m33;
 }
 
+void Matrix4x4_set_identity(Matrix4x4 m) {
+    Matrix4x4_set(m,
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
+    );
+}
+
+void Matrix4x4_set_zero(Matrix4x4 m) {
+    Matrix4x4_set(m,
+        0, 0, 0, 0,
+        0, 0, 0, 0,
+        0, 0, 0, 0,
+        0, 0, 0, 0
+    );
+}
+
 void Matrix4x4_copy(Matrix4x4 out, Matrix4x4 m) {
     memcpy((void*) out, (void*) m, sizeof(Matrix4x4));
 }
@@ -59,6 +77,22 @@ void Matrix4x4_multiply(Matrix4x4 out, Matrix4x4 m1, Matrix4x4 m2)
     memcpy((void*) out, (void*) &m, sizeof(Matrix4x4));
 }
 
+void Matrix4x4_multiply_values(Matrix4x4 out, Matrix4x4 m1,
+        double m2_00, double m2_01, double m2_02, double m2_03,
+        double m2_10, double m2_11, double m2_12, double m2_13,
+        double m2_20, double m2_21, double m2_22, double m2_23,
+        double m2_30, double m2_31, double m2_32, double m2_33
+) {
+    Matrix4x4 m2;
+    Matrix4x4_set(m2,
+        m2_00, m2_01, m2_02, m2_03,
+        m2_10, m2_11, m2_12, m2_13,
+        m2_20, m2_21, m2_22, m2_23,
+        m2_30, m2_31, m2_32, m2_33
+    );
+    Matrix4x4_multiply(out, m1, m2);
+}
+
 bool Matrix4x4_is_equal(Matrix4x4 m1, Matrix4x4 m2, double epsilon) {
     for(int i=0; i<4; i++) {
         for(int j=0; j<4; j++) {
@@ -68,6 +102,12 @@ bool Matrix4x4_is_equal(Matrix4x4 m1, Matrix4x4 m2, double epsilon) {
         }
     }
     return true;
+}
+
+bool Matrix4x4_is_identity(Matrix4x4 m, double epsilon) {
+    Matrix4x4 identity;
+    Matrix4x4_set_identity(identity);
+    return Matrix4x4_is_equal(m, identity, epsilon);
 }
 
 /*

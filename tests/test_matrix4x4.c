@@ -42,6 +42,16 @@ int test_multiply() {
 
     Matrix4x4_multiply(result, m1, m2);
     ASSERT(Matrix4x4_is_equal(result, correct_result, 0));
+
+    Matrix4x4_set_zero(result);
+    Matrix4x4_multiply_values(result, m1,
+        m2[0][0], m2[0][1], m2[0][2], m2[0][3],
+        m2[1][0], m2[1][1], m2[1][2], m2[1][3],
+        m2[2][0], m2[2][1], m2[2][2], m2[2][3],
+        m2[3][0], m2[3][1], m2[3][2], m2[3][3]
+    );
+    ASSERT(Matrix4x4_is_equal(result, correct_result, 0));
+
     return TEST_PASS;
 }
 

@@ -28,6 +28,16 @@ void Matrix4x4_set(Matrix4x4 m,
 );
 
 /**
+ * Set matix to identity matrix.
+ */
+void Matrix4x4_set_identity(Matrix4x4 m);
+
+/**
+ * Set matrix to zero matrix;
+ */
+void Matrix4x4_set_zero(Matrix4x4 m);
+
+/**
  * Copy matrix ``m`` to ``out``.
  */
 void Matrix4x4_copy(Matrix4x4 out, Matrix4x4 m);
@@ -38,12 +48,27 @@ void Matrix4x4_copy(Matrix4x4 out, Matrix4x4 m);
 void Matrix4x4_multiply(Matrix4x4 out, Matrix4x4 m1, Matrix4x4 m2);
 
 /**
+ * Like ``Matrix4x4_multiply``, but values for m2 are passed individually.
+ */
+void Matrix4x4_multiply_values(Matrix4x4 out, Matrix4x4 m1,
+        double m2_00, double m2_01, double m2_02, double m2_03,
+        double m2_10, double m2_11, double m2_12, double m2_13,
+        double m2_20, double m2_21, double m2_22, double m2_23,
+        double m2_30, double m2_31, double m2_32, double m2_33
+);
+
+/**
  * Test equality of matrices ``m1`` and ``m2`` with tolerance ``epsilon``.
  *
  * The matrices are compared element by element. If all ``m1[i][j]`` and
  * ``m2[i][j]`` are within ``epsilon`` of eachother, ``true`` is returned.
  */
 bool Matrix4x4_is_equal(Matrix4x4 m1, Matrix4x4 m2, double epsilon);
+
+/**
+ * Test equality against the identity matrix.
+ */
+bool Matrix4x4_is_identity(Matrix4x4 m, double epsilon);
 
 /**
  * Compute the inverse of ``m``, store the result in ``out``.
