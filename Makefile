@@ -70,5 +70,6 @@ clean:
 	-rm $(LIB_SONAME)
 	-rm $(LIB_OBJECTS)
 	-rm bin/*
+	-rm tests/bin/*
 
 .PHONY: all clean programs tests
