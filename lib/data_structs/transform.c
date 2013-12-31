@@ -16,7 +16,7 @@ void Transform_free(Transform* t) {
     free(t);
 }
 
-void Transform_matrix(Transform* t, Matrix4x4 m, Matrix4x4 m_inv) {
+void Transform_matrix_multiply(Transform* t, Matrix4x4 m, Matrix4x4 m_inv) {
     Matrix4x4_multiply(t->m, t->m, m);
     Matrix4x4_multiply(t->inv, t->inv, m_inv);
 }
