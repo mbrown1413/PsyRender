@@ -93,6 +93,23 @@ void Matrix4x4_multiply_values(Matrix4x4 out, Matrix4x4 m1,
     Matrix4x4_multiply(out, m1, m2);
 }
 
+void Matrix4x4_premultiply_values(Matrix4x4 out,
+        double m1_00, double m1_01, double m1_02, double m1_03,
+        double m1_10, double m1_11, double m1_12, double m1_13,
+        double m1_20, double m1_21, double m1_22, double m1_23,
+        double m1_30, double m1_31, double m1_32, double m1_33,
+        Matrix4x4 m2
+) {
+    Matrix4x4 m1;
+    Matrix4x4_set(m1,
+        m1_00, m1_01, m1_02, m1_03,
+        m1_10, m1_11, m1_12, m1_13,
+        m1_20, m1_21, m1_22, m1_23,
+        m1_30, m1_31, m1_32, m1_33
+    );
+    Matrix4x4_multiply(out, m1, m2);
+}
+
 bool Matrix4x4_is_equal(Matrix4x4 m1, Matrix4x4 m2, double epsilon) {
     for(int i=0; i<4; i++) {
         for(int j=0; j<4; j++) {

@@ -58,6 +58,18 @@ void Matrix4x4_multiply_values(Matrix4x4 out, Matrix4x4 m1,
 );
 
 /**
+ * Like ``Matrix4x4_multiply_values``, but individual values are given for m1,
+ * not m2.  m1*m2 is returned.
+ */
+void Matrix4x4_premultiply_values(Matrix4x4 out,
+        double m1_00, double m1_01, double m1_02, double m1_03,
+        double m1_10, double m1_11, double m1_12, double m1_13,
+        double m1_20, double m1_21, double m1_22, double m1_23,
+        double m1_30, double m1_31, double m1_32, double m1_33,
+        Matrix4x4 m2
+);
+
+/**
  * Test equality of matrices ``m1`` and ``m2`` with tolerance ``epsilon``.
  *
  * The matrices are compared element by element. If all ``m1[i][j]`` and
