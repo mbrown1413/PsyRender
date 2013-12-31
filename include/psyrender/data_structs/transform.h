@@ -7,7 +7,7 @@ typedef struct {
 } Transform;
 
 Transform* Transform_new();
-//void Transform_copy(Transform* out, const Transform* t);
+void Transform_copy(Transform* out, const Transform* t);
 void Transform_free(Transform* t);
 
 void Transform_matrix(Transform* t, Matrix4x4 m, Matrix4x4 m_inv);
@@ -22,5 +22,10 @@ void Transform_point(const Transform* t, Point* out, const Point* p);
 void Transform_vector(const Transform* t, Vector* out, const Vector* v);
 void Transform_normal(const Transform* t, Vector* out, const Vector* v);
 void Transform_ray(const Transform* t, Ray* out, const Ray* in);
+
+void Transform_point_inverse(const Transform* t, Point* out, const Point* p);
+void Transform_vector_inverse(const Transform* t, Vector* out, const Vector* v);
+void Transform_normal_inverse(const Transform* t, Vector* out, const Vector* v);
+void Transform_ray_inverse(const Transform* t, Ray* out, const Ray* in);
 
 #endif
