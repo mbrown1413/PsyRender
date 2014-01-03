@@ -5,7 +5,7 @@
 
 const double epsilon = 10E-10;
 
-// Asserts that the inverse transform is actually the inverse
+// Asserts that the inverse transform t->inv is actually the inverse of t->m
 #define ASSERT_TRANSFORM_INVERSE(t) { \
     Matrix4x4 _m; \
     Matrix4x4_multiply(_m, t->m, t->inv); \
@@ -21,6 +21,7 @@ int test_rotate_z();
 int test_scale_xyz();
 int test_scale_y();
 int test_translate_rotate();
+int test_equal_src_dest();
 int test_copy();
 
 test_func_t test_functions[] = {
@@ -33,6 +34,7 @@ test_func_t test_functions[] = {
     test_scale_xyz,
     test_scale_y,
     test_translate_rotate,
+    test_equal_src_dest,
     test_copy,
     NULL
 };
@@ -99,6 +101,9 @@ int assert_transform_results(const Transform* t,
 }
 
 
+/**
+ * Test the identity transformation.
+ */
 int test_null_transform() {
     Point p = {1, 1, 1};
     Vector v = {1, 1, 1};
@@ -117,6 +122,9 @@ int test_null_transform() {
     return result;
 }
 
+/**
+ * Test ``Transform_translate()``.
+ */
 int test_translate() {
     Point p = {1, 1, 1};
     Vector v = {1, 1, 1};
@@ -141,10 +149,16 @@ int test_translate() {
     return result;
 }
 
+/**
+ * Test ``Transform_rotate()``.
+ */
 int test_rotate() {
     return TEST_SKIP;
 }
 
+/**
+ * Test ``Transform_rotate_x()``.
+ */
 int test_rotate_x() {
     Point p = {0, 1, 1};
     Vector v = {0, 1, 1};
@@ -169,6 +183,9 @@ int test_rotate_x() {
     return result;
 }
 
+/**
+ * Test ``Transform_rotate_y()``.
+ */
 int test_rotate_y() {
     Point p = {1, 0, 1};
     Vector v = {1, 0, 1};
@@ -193,6 +210,9 @@ int test_rotate_y() {
     return result;
 }
 
+/**
+ * Test ``Transform_rotate_z()``.
+ */
 int test_rotate_z() {
     Point p = {1, 1, 0};
     Vector v = {1, 1, 0};
@@ -217,6 +237,9 @@ int test_rotate_z() {
     return result;
 }
 
+/**
+ * Test ``Transform_scale()`` where x == y == z.
+ */
 int test_scale_xyz() {
     Point p = {1, 1, 1};
     Vector v = {1, 1, 1};
@@ -242,8 +265,9 @@ int test_scale_xyz() {
 }
 
 /**
- * Normal transforms are different than vector transforms when a scale
- * transform is performed unevenly across the x, y, and z axes.
+ * Test ``Transform_scale()`` where y == 0.5 and x == z == 1. Normal transforms
+ * are different than vector transforms when a scale transform is performed
+ * unevenly across the x, y, and z axes.
  */
 int test_scale_y() {
     Point p = {1, 1, 1};
@@ -269,6 +293,9 @@ int test_scale_y() {
     return result;
 }
 
+/**
+ * Test applying both a rotation and translation to a transform.
+ */
 int test_translate_rotate() {
     Point p = {0, 1, 0};
     Vector v = {0, 1, 0};
@@ -295,6 +322,9 @@ int test_translate_rotate() {
     return result;
 }
 
+/**
+ * Test ``Transform_copy()``.
+ */
 int test_copy() {
     Transform* t1 = Transform_new();
     Transform_translate(t1, 1, 1, 1);
@@ -308,5 +338,69 @@ int test_copy() {
 
     Transform_free(t1);
     Transform_free(t2);
+    return TEST_PASS;
+}
+
+/**
+ * Test applying transformations where the source and destination are the same.
+ * For example: ``Transform_point(t, p, p)``.
+ */
+int test_equal_src_dest() {
+    Point p = {0, 1, 0};
+    Vector v = {0, 1, 0};
+    Vector n = {0, 1, 0};  // Normal
+    Ray r = {{0, 1, 0}, {0, 1, 0}};
+
+    // A bunch of transforms to makes sure x, y, and z are all dependent on
+    // eachother.
+    Transform* t = Transform_new();
+    Transform_translate(t, 1, 1, 1);
+    Transform_rotate_x(t, 45);
+    Transform_rotate_y(t, 45);
+    Transform_rotate_z(t, 45);
+    Transform_scale(t, 2, 3, 4);
+
+    Point p_correct, p_out;
+    Vector v_correct, v_out;
+    Vector n_correct, n_out;
+    Ray r_correct, r_out;
+
+    // Store correct results in ?_correct
+    // Here, we just record results when src and dst are different. We'll use
+    // this as the "correct" result; this test only cares if the results are
+    // different when src and dst are the same.
+    Transform_point(t, &p_correct, &p);
+    Transform_vector(t, &v_correct, &v);
+    Transform_normal(t, &n_correct, &n);
+    Transform_ray(t, &r_correct, &r);
+
+    // Store result when src and dst are same into ?_out
+    Point_copy(&p_out, &p);
+    Vector_copy(&v_out, &v);
+    Vector_copy(&n_out, &n);
+    Ray_copy(&r_out, &r);
+    Transform_point(t, &p_out, &p_out);
+    Transform_vector(t, &v_out, &v_out);
+    Transform_normal(t, &n_out, &n_out);
+    Transform_ray(t, &r_out, &r_out);
+
+    // ?_out should be the same as ?_correct
+    ASSERT(Point_is_equal(&p_out, &p_correct, 0));
+    ASSERT(Vector_is_equal(&v_out, &v_correct, 0));
+    ASSERT(Vector_is_equal(&n_out, &n_correct, 0));
+    ASSERT(Ray_is_equal(&r_out, &r_correct, 0));
+
+    // Inverse ?_out into ?_out
+    Transform_point_inverse(t, &p_out, &p_out);
+    Transform_vector_inverse(t, &v_out, &v_out);
+    Transform_normal_inverse(t, &n_out, &n_out);
+    Transform_ray_inverse(t, &r_out, &r_out);
+
+    ASSERT(Point_is_equal(&p_out, &p, epsilon));
+    ASSERT(Vector_is_equal(&v_out, &v, epsilon));
+    ASSERT(Vector_is_equal(&n_out, &n, epsilon));
+    ASSERT(Ray_is_equal(&r_out, &r, epsilon));
+
+    Transform_free(t);
     return TEST_PASS;
 }

@@ -113,29 +113,35 @@ void Transform_scale(Transform* t, double x, double y, double z) {
 }
 
 void Transform_point(const Transform* t, Point* out, const Point* p) {
+    Point a;
     double w = t->m[3][0]*p->x + t->m[3][1]*p->y + t->m[3][2]*p->z + t->m[3][3];
     if(w == 1) {
-        out->x = t->m[0][0]*p->x + t->m[0][1]*p->y + t->m[0][2]*p->z + t->m[0][3];
-        out->y = t->m[1][0]*p->x + t->m[1][1]*p->y + t->m[1][2]*p->z + t->m[1][3];
-        out->z = t->m[2][0]*p->x + t->m[2][1]*p->y + t->m[2][2]*p->z + t->m[2][3];
+        a.x = t->m[0][0]*p->x + t->m[0][1]*p->y + t->m[0][2]*p->z + t->m[0][3];
+        a.y = t->m[1][0]*p->x + t->m[1][1]*p->y + t->m[1][2]*p->z + t->m[1][3];
+        a.z = t->m[2][0]*p->x + t->m[2][1]*p->y + t->m[2][2]*p->z + t->m[2][3];
     } else {
-        out->x = (t->m[0][0]*p->x + t->m[0][1]*p->y + t->m[0][2]*p->z + t->m[0][3]) / w;
-        out->y = (t->m[1][0]*p->x + t->m[1][1]*p->y + t->m[1][2]*p->z + t->m[1][3]) / w;
-        out->z = (t->m[2][0]*p->x + t->m[2][1]*p->y + t->m[2][2]*p->z + t->m[2][3]) / w;
+        a.x = (t->m[0][0]*p->x + t->m[0][1]*p->y + t->m[0][2]*p->z + t->m[0][3]) / w;
+        a.y = (t->m[1][0]*p->x + t->m[1][1]*p->y + t->m[1][2]*p->z + t->m[1][3]) / w;
+        a.z = (t->m[2][0]*p->x + t->m[2][1]*p->y + t->m[2][2]*p->z + t->m[2][3]) / w;
     }
+    Point_copy(out, &a);
 }
 
 void Transform_vector(const Transform* t, Vector* out, const Vector* v) {
-    out->x = t->m[0][0]*v->x + t->m[0][1]*v->y + t->m[0][2]*v->z;
-    out->y = t->m[1][0]*v->x + t->m[1][1]*v->y + t->m[1][2]*v->z;
-    out->z = t->m[2][0]*v->x + t->m[2][1]*v->y + t->m[2][2]*v->z;
+    Vector a;
+    a.x = t->m[0][0]*v->x + t->m[0][1]*v->y + t->m[0][2]*v->z;
+    a.y = t->m[1][0]*v->x + t->m[1][1]*v->y + t->m[1][2]*v->z;
+    a.z = t->m[2][0]*v->x + t->m[2][1]*v->y + t->m[2][2]*v->z;
+    Vector_copy(out, &a);
 }
 
 void Transform_normal(const Transform* t, Vector* out, const Vector* v) {
     // Set ``out`` to the v times the transpose of the inverse
-    out->x = t->inv[0][0]*v->x + t->inv[1][0]*v->y + t->inv[2][0]*v->z;
-    out->y = t->inv[0][1]*v->x + t->inv[1][1]*v->y + t->inv[2][1]*v->z;
-    out->z = t->inv[0][2]*v->x + t->inv[1][2]*v->y + t->inv[2][2]*v->z;
+    Vector a;
+    a.x = t->inv[0][0]*v->x + t->inv[1][0]*v->y + t->inv[2][0]*v->z;
+    a.y = t->inv[0][1]*v->x + t->inv[1][1]*v->y + t->inv[2][1]*v->z;
+    a.z = t->inv[0][2]*v->x + t->inv[1][2]*v->y + t->inv[2][2]*v->z;
+    Vector_copy(out, &a);
 }
 
 void Transform_ray(const Transform* t, Ray* out, const Ray* in) {
@@ -144,29 +150,35 @@ void Transform_ray(const Transform* t, Ray* out, const Ray* in) {
 }
 
 void Transform_point_inverse(const Transform* t, Point* out, const Point* p) {
+    Point a;
     double w = t->inv[3][0]*p->x + t->inv[3][1]*p->y + t->inv[3][2]*p->z + t->inv[3][3];
     if(w == 1) {
-        out->x = t->inv[0][0]*p->x + t->inv[0][1]*p->y + t->inv[0][2]*p->z + t->inv[0][3];
-        out->y = t->inv[1][0]*p->x + t->inv[1][1]*p->y + t->inv[1][2]*p->z + t->inv[1][3];
-        out->z = t->inv[2][0]*p->x + t->inv[2][1]*p->y + t->inv[2][2]*p->z + t->inv[2][3];
+        a.x = t->inv[0][0]*p->x + t->inv[0][1]*p->y + t->inv[0][2]*p->z + t->inv[0][3];
+        a.y = t->inv[1][0]*p->x + t->inv[1][1]*p->y + t->inv[1][2]*p->z + t->inv[1][3];
+        a.z = t->inv[2][0]*p->x + t->inv[2][1]*p->y + t->inv[2][2]*p->z + t->inv[2][3];
     } else {
-        out->x = (t->inv[0][0]*p->x + t->inv[0][1]*p->y + t->inv[0][2]*p->z + t->inv[0][3]) / w;
-        out->y = (t->inv[1][0]*p->x + t->inv[1][1]*p->y + t->inv[1][2]*p->z + t->inv[1][3]) / w;
-        out->z = (t->inv[2][0]*p->x + t->inv[2][1]*p->y + t->inv[2][2]*p->z + t->inv[2][3]) / w;
+        a.x = (t->inv[0][0]*p->x + t->inv[0][1]*p->y + t->inv[0][2]*p->z + t->inv[0][3]) / w;
+        a.y = (t->inv[1][0]*p->x + t->inv[1][1]*p->y + t->inv[1][2]*p->z + t->inv[1][3]) / w;
+        a.z = (t->inv[2][0]*p->x + t->inv[2][1]*p->y + t->inv[2][2]*p->z + t->inv[2][3]) / w;
     }
+    Point_copy(out, &a);
 }
 
 void Transform_vector_inverse(const Transform* t, Vector* out, const Vector* v) {
-    out->x = t->inv[0][0]*v->x + t->inv[0][1]*v->y + t->inv[0][2]*v->z;
-    out->y = t->inv[1][0]*v->x + t->inv[1][1]*v->y + t->inv[1][2]*v->z;
-    out->z = t->inv[2][0]*v->x + t->inv[2][1]*v->y + t->inv[2][2]*v->z;
+    Vector a;
+    a.x = t->inv[0][0]*v->x + t->inv[0][1]*v->y + t->inv[0][2]*v->z;
+    a.y = t->inv[1][0]*v->x + t->inv[1][1]*v->y + t->inv[1][2]*v->z;
+    a.z = t->inv[2][0]*v->x + t->inv[2][1]*v->y + t->inv[2][2]*v->z;
+    Vector_copy(out, &a);
 }
 
 void Transform_normal_inverse(const Transform* t, Vector* out, const Vector* v) {
+    Vector a;
     // Set ``out`` to the v times the transpose of the inverse
-    out->x = t->m[0][0]*v->x + t->m[1][0]*v->y + t->m[2][0]*v->z;
-    out->y = t->m[0][1]*v->x + t->m[1][1]*v->y + t->m[2][1]*v->z;
-    out->z = t->m[0][2]*v->x + t->m[1][2]*v->y + t->m[2][2]*v->z;
+    a.x = t->m[0][0]*v->x + t->m[1][0]*v->y + t->m[2][0]*v->z;
+    a.y = t->m[0][1]*v->x + t->m[1][1]*v->y + t->m[2][1]*v->z;
+    a.z = t->m[0][2]*v->x + t->m[1][2]*v->y + t->m[2][2]*v->z;
+    Vector_copy(out, &a);
 }
 
 void Transform_ray_inverse(const Transform* t, Ray* out, const Ray* in) {
