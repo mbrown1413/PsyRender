@@ -9,6 +9,7 @@ typedef struct {
     double x, y, z;
 } Vector;
 
+void Vector_copy(Vector* out, const Vector* in);
 bool Vector_is_equal(const Vector* v1, const Vector* v2, double epsilon);
 void Vector_cross(Vector* result, const Vector* a, const Vector* b);
 double Vector_mag(const Vector* v);

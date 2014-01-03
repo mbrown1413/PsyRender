@@ -3,6 +3,10 @@
 
 #include <math.h>
 
+void Vector_copy(Vector* out, const Vector* in) {
+    memcpy((void*) out, (void*) in, sizeof(Vector));
+}
+
 bool Vector_is_equal(const Vector* v1, const Vector* v2, double epsilon) {
     return fabs(v1->x - v2->x) <= epsilon &&
            fabs(v1->y - v2->y) <= epsilon &&
