@@ -39,8 +39,6 @@
 #ifndef _PSY_CANVAS_H
 #define _PSY_CANVAS_H
 
-#include <stdbool.h>
-
 #define CANVAS_HEADER \
     struct canvas_func_table func; \
     unsigned int width, height;

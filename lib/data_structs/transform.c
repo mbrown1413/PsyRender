@@ -1,4 +1,6 @@
 
+#include <stdlib.h>
+
 #include "psyrender.h"
 
 Transform* Transform_new() {

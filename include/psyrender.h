@@ -25,17 +25,16 @@
 #define INTERFACE_CALL_FUNC(type, to_call, instance, ...) (instance)->func.to_call((type*) instance, __VA_ARGS__)
 #define INTERFACE_CALL_FUNC_NO_ARGS(type, to_call, instance) (instance)->func.to_call((type*) instance)
 
+
 // These typedefs resolve any circular dependancies between types.
-struct Renderer_struct;
-struct Object_struct;
-struct Material_struct;
-struct Camera_struct;
-struct Canvas_struct;
 typedef struct Renderer_struct Renderer;
+typedef struct Shape_struct Shape;
 typedef struct Object_struct Object;
 typedef struct Material_struct Material;
 typedef struct Camera_struct Camera;
 typedef struct Canvas_struct Canvas;
+typedef struct Scene_struct Scene;
+typedef struct Volume_struct Volume;
 
 #include "psyrender/data_structs/vector.h"
 #include "psyrender/data_structs/point.h"
@@ -45,11 +44,14 @@ typedef struct Canvas_struct Canvas;
 #include "psyrender/data_structs/matrix4x4.h"
 #include "psyrender/data_structs/transform.h"
 
-#include "psyrender/scene.h"
+#include "psyrender/surface_point.h"
 #include "psyrender/material.h"
+#include "psyrender/volume.h"
+#include "psyrender/shape.h"
 #include "psyrender/object.h"
 #include "psyrender/camera.h"
 #include "psyrender/canvas.h"
 #include "psyrender/renderer.h"
+#include "psyrender/scene.h"
 
 #endif

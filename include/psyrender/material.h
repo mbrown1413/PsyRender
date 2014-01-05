@@ -16,7 +16,7 @@ struct material_transmit {
 };
 
 struct material_func_table {
-    struct material_transmit (*get_transmit)(const struct Material_struct* mat, const Object* object, const Point* intersect);
+    struct material_transmit (*get_transmit)(const Material* mat, const Object* object, const Point* intersect);
 };
 
 struct Material_struct {

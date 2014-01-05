@@ -18,7 +18,7 @@ all: library programs tests
 ##### Building Library #####
 # Compiles all .c files in $(LIB_DIRS) into a .so file
 
-LIB_DIRS=lib/ lib/objects lib/materials lib/canvases lib/cameras lib/data_structs lib/renderers
+LIB_DIRS=lib/ lib/shapes lib/materials lib/canvases lib/cameras lib/data_structs lib/renderers
 LIB_SRC=$(foreach DIR, $(LIB_DIRS), $(wildcard $(DIR)/*.c))
 LIB_OBJECTS=$(patsubst %.c, %.o, $(LIB_SRC))
 

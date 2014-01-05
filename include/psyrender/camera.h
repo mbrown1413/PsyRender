@@ -13,13 +13,12 @@
     Point pos;
 
 struct camera_func_table {
-    void (*map)(const struct Camera_struct* cam, double x, double y, Ray* r);
+    void (*map)(const Camera* cam, double x, double y, Ray* r);
 };
 
 struct Camera_struct {
     CAMERA_HEADER
 };
-
 
 #define Camera_map(...) INTERFACE_CALL_FUNC(Camera, map, __VA_ARGS__)
 #define Camera_free(cam) free(cam)

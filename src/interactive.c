@@ -109,47 +109,57 @@ void draw() {
     glutSwapBuffers();
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char* argv[]) {
     Material_Solid* mat_solid;
-    Object* sphere;
+    Shape* shape;
+    Object* sphere1;
+    Object* sphere2;
+    Object* sphere3;
     Object* plane;
 
     renderer = Renderer_RayTraceSimple_new(UINT_MAX);
 
     scene = Scene_new();
 
-    sphere = Object_Sphere_new(2, 5, -1, 1);
-    mat_solid = (Material_Solid*) sphere->mat;
+    shape = Shape_Sphere_new(1);
+    mat_solid = (Material_Solid*) Material_Solid_new();
     mat_solid->transmit.ambient = (Color) {0.1 * 255, 0, 0};
     mat_solid->transmit.diffuse = (Color) {0.4 * 255, 0, 0};
     mat_solid->transmit.reflect = (Color) {255 * 0.9, 255 * 0.9, 255 * 0.9};
     mat_solid->transmit.refract = (Color) {0, 0, 0};
-    Scene_add_object(scene, (Object*) sphere);
+    sphere1 = Object_new(shape, (Material*) mat_solid, NULL);
+    Transform_translate(sphere1->trans, 2, 5, -1);
+    Scene_add_object(scene, sphere1);
 
-    sphere = Object_Sphere_new(-2, 7, -1, 1);
-    mat_solid = (Material_Solid*) sphere->mat;
+    shape = Shape_Sphere_new(1);
+    mat_solid = (Material_Solid*) Material_Solid_new();
     mat_solid->transmit.ambient = (Color) {0, 0, 0.1 * 255};
     mat_solid->transmit.diffuse = (Color) {0, 0, 0.4 * 255};
     mat_solid->transmit.reflect = (Color) {255 * 0.9, 255 * 0.9, 255 * 0.9};
     mat_solid->transmit.refract = (Color) {0, 0, 0};
-    Scene_add_object(scene, (Object*) sphere);
+    sphere2 = Object_new(shape, (Material*) mat_solid, NULL);
+    Transform_translate(sphere2->trans, -2, 7, -1);
+    Scene_add_object(scene, sphere2);
 
-    sphere = Object_Sphere_new(0, 10, 1, 3);
-    mat_solid = (Material_Solid*) sphere->mat;
+    shape = Shape_Sphere_new(3);
+    mat_solid = (Material_Solid*) Material_Solid_new();
     mat_solid->transmit.ambient = (Color) {0, 0.1 * 255, 0};
     mat_solid->transmit.diffuse = (Color) {0, 0.4 * 255, 0};
     mat_solid->transmit.reflect = (Color) {255 * 0.9, 255 * 0.9, 255 * 0.9};
     mat_solid->transmit.refract = (Color) {0, 0, 0};
-    Scene_add_object(scene, (Object*) sphere);
+    sphere3 = Object_new(shape, (Material*) mat_solid, NULL);
+    Transform_translate(sphere3->trans, 0, 10, 1);
+    Scene_add_object(scene, sphere3);
 
-    plane = Object_Plane_new(-2);
-    Object_set_material((Object*) plane, Material_Checker_new(2));
-    ((Material_Checker*)plane->mat)->tile1_transmit.ambient = (Color) {255*0.0, 255*0.0, 255*0.0};
-    ((Material_Checker*)plane->mat)->tile1_transmit.diffuse = (Color) {255*0.1, 255*0.1, 255*0.1};
-    ((Material_Checker*)plane->mat)->tile1_transmit.reflect = (Color) {255*0.2, 255*0.2, 255*0.2};
-    ((Material_Checker*)plane->mat)->tile2_transmit.ambient = (Color) {127*0.1, 127*0.1, 127*0.1};
-    ((Material_Checker*)plane->mat)->tile2_transmit.diffuse = (Color) {127, 127, 127};
-    ((Material_Checker*)plane->mat)->tile2_transmit.reflect = (Color) {255*0.2, 255*0.2, 255*0.2};
+    shape = Shape_Plane_new(-2);
+    Material_Checker* checker = (Material_Checker*) Material_Checker_new(2);
+    plane = Object_new(shape, (Material*) checker, NULL);
+    checker->tile1_transmit.ambient = (Color) {255*0.0, 255*0.0, 255*0.0};
+    checker->tile1_transmit.diffuse = (Color) {255*0.1, 255*0.1, 255*0.1};
+    checker->tile1_transmit.reflect = (Color) {255*0.2, 255*0.2, 255*0.2};
+    checker->tile2_transmit.ambient = (Color) {127*0.1, 127*0.1, 127*0.1};
+    checker->tile2_transmit.diffuse = (Color) {127, 127, 127};
+    checker->tile2_transmit.reflect = (Color) {255*0.2, 255*0.2, 255*0.2};
     Scene_add_object(scene, (Object*) plane);
 
     reset_view();  // Initializes camera
