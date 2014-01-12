@@ -20,6 +20,7 @@
 
 #define MIN(a, b) ( (a)<(b) ? (a) : (b) )
 #define MAX(a, b) ( (a)>(b) ? (a) : (b) )
+#define CLAMP(min, x, max) MIN(max, MAX(min, x))
 
 // Used to define interface functions
 #define INTERFACE_CALL_FUNC(type, to_call, instance, ...) (instance)->func.to_call((type*) instance, __VA_ARGS__)
@@ -43,6 +44,7 @@ typedef struct Volume_struct Volume;
 #include "psyrender/data_structs/color.h"
 #include "psyrender/data_structs/matrix4x4.h"
 #include "psyrender/data_structs/transform.h"
+#include "psyrender/data_structs/photon.h"
 
 #include "psyrender/surface_point.h"
 #include "psyrender/material.h"

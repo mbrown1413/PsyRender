@@ -1,5 +1,6 @@
 
 #include <stdlib.h>
+#include <float.h>
 
 #include "psyrender.h"
 
@@ -34,10 +35,9 @@ bool Renderer_RayTraceSimple_render(Renderer* _renderer, Scene* scene, Camera* c
 
 static Color trace_ray(Renderer_RayTraceSimple* renderer, const Scene* scene, const Ray* _r, unsigned int depth, double n1) {
     SurfacePoint sp;
-    Color result = {0, 0, 0};
-    struct material_transmit transmit;
-    Color tmp_color;
-    Ray r, tmp_ray;
+    Color result = (Color) {0, 0, 0};
+    Ray r;
+    Photon p;
 
     Vector_assign(&r.o, &_r->o);
     Vector_assign(&r.d, &_r->d);
@@ -46,75 +46,22 @@ static Color trace_ray(Renderer_RayTraceSimple* renderer, const Scene* scene, co
     if(!Scene_ray_intersect(scene, &r, &sp) || depth > renderer->max_depth) {
         return (Color) {0, 0, 0};
     }
-
-    transmit = Material_get_transmit(sp.obj->mat, sp.obj, &sp.point);
     Vector_normalize(&sp.norm);
 
-    // Ambient
-    result = transmit.ambient;
-
-    // Diffuse
-    Vector light_direction = {1, 0, 1}; // TODO: One hardcoded light for now
-    Vector_normalize(&light_direction);
-
-    tmp_ray.d = light_direction;
-    tmp_ray.o = sp.point;
-    if (!Scene_ray_intersect(scene, &tmp_ray, NULL)) {
-
-        double angle_factor = MAX(0, Vector_dot(&light_direction, &sp.norm));
-        Color_scalar_mult(&tmp_color, &transmit.diffuse, angle_factor);
-        Color_add(&result, &result, &tmp_color);
-
-        if (Object_is_inside(sp.obj, &r.o)) {
-            Vector_scalar_mult(&sp.norm, &sp.norm, -1);
-        }
-
+    // Sample material in direction of lights
+    //TODO: One hardcoded light for now
+    p.ray.o = sp.point;
+    p.ray.d = (Vector) {1, 0, 1};
+    Vector_normalize(&p.ray.d);
+    if(!Scene_ray_intersect(scene, &p.ray, NULL)) {
+        p.color = (Color) {255, 255, 255};
+    } else {
+        p.color = (Color) {0, 0, 0};
     }
 
-    // Reflective
-    if (!Color_is_black(&transmit.reflect)) {
-        Ray_reflect(&tmp_ray, &r, &sp.point, &sp.norm);
-        tmp_color = trace_ray(renderer, scene, &tmp_ray, depth+1, n1);
-        tmp_color = (Color) {
-            tmp_color.r * (transmit.reflect.r / 255.0),
-            tmp_color.g * (transmit.reflect.g / 255.0),
-            tmp_color.b * (transmit.reflect.b / 255.0)
-        };
-        Color_add(&result, &result, &tmp_color);
-    }
-
-    // Refractive
-    if (!Color_is_black(&transmit.refract)) {
-        Vector tmp_vector;
-        Vector refracted;
-        double n2;
-
-        if (fabs(n1 - ETHER_INDEX_OF_REFRACTION) <= EPSILON) {
-            n2 = 1.1;  // TODO: Hardcoded index of refraction for now
-        } else {
-            n2 = ETHER_INDEX_OF_REFRACTION;
-        }
-        double ratio = n1 / n2;
-
-        double cos_theta_i = -1 * Vector_dot(&r.d, &sp.norm);
-        double cos_theta_t = sqrt(1 - (ratio*ratio * (1- cos_theta_i*cos_theta_i )));
-        if (!isnan(cos_theta_t)) {
-            Vector_scalar_mult(&refracted, &sp.norm, ratio*cos_theta_i - cos_theta_t);
-            if (cos_theta_i < 0) {
-                Vector_scalar_mult(&refracted, &refracted, -1);
-            }
-            Vector_scalar_mult(&tmp_vector, &r.d, ratio);
-            Vector_add(&refracted, &refracted, &tmp_vector);
-
-            Vector_assign(&tmp_ray.o, &sp.point);
-            Vector_assign(&tmp_ray.d, &refracted);
-
-            tmp_color = trace_ray(renderer, scene, &tmp_ray, depth+1, n2);
-            Color_mult(&tmp_color, &tmp_color, &transmit.refract);
-            Color_add(&result, &result, &tmp_color);
-        }
-
-    }
+    p.ray.o = (Vector) {DBL_MAX, 0, DBL_MAX};
+    Vector_scalar_mult(&p.ray.d, &p.ray.d, -1);
+    result = Material_direction_scatter(sp.obj->mat, &sp, &p, &r);
 
     return result;
 }

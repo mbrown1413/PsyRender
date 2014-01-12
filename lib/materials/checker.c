@@ -4,34 +4,41 @@
 
 #include "psyrender.h"
 
-Material* Material_Checker_new(unsigned int scale) {
+Material* Material_Checker_new(unsigned int scale, Material* tile1, Material* tile2) {
     Material_Checker* m = (Material_Checker*) malloc(sizeof(Material_Checker));
     m->func = material_checker_func_table;
     m->scale = scale;
-    m->tile1_transmit = (struct material_transmit) {
-        {0, 0, 0},
-        {0, 0, 0},
-        {0, 0, 0},
-        {0, 0, 0}
-    };
-    m->tile2_transmit = (struct material_transmit) {
-        {0, 0, 0},
-        {255 ,255, 255},
-        {0, 0, 0},
-        {0, 0, 0}
-    };
+    m->tile1 = tile1;
+    m->tile2 = tile2;
     return (Material*) m;
 }
 
-struct material_transmit Material_Checker_get_transmit(const Material* _m, const Object* object, const Point* intersect) {
-    Material_Checker* m = (Material_Checker*) _m;
+Color Material_Checker_direction_scatter(const Material* _mat,
+                                         const SurfacePoint* sp,
+                                         const Photon* in,
+                                         const Ray* out) {
+    const Material_Checker* mat = (const Material_Checker*) _mat;
 
-    if (( ((int) round(intersect->x)) / m->scale + \
-          ((int) round(intersect->y)) / m->scale + \
-          ((int) round(intersect->z)) / m->scale) % 2)
+    const Material* active_mat;
+    if (( ((int) round(sp->point.x)) / mat->scale + \
+          ((int) round(sp->point.y)) / mat->scale + \
+          ((int) round(sp->point.z)) / mat->scale) % 2)
     {
-        return m->tile1_transmit;
+        active_mat = mat->tile1;
     } else {
-        return m->tile2_transmit;
+        active_mat = mat->tile2;
     }
+
+    return Material_direction_scatter(active_mat, sp, in, out);
+}
+
+void Material_Checker_free(Material* mat) {
+    free(mat);
+}
+
+void Material_Checker_free_with_tiles(Material* _mat) {
+    Material_Checker* mat = (Material_Checker*) _mat;
+    Material_free(mat->tile1);
+    Material_free(mat->tile2);
+    free(mat);
 }

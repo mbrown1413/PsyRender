@@ -20,9 +20,9 @@ void Color_scalar_mult(Color* result, const Color* c, double value) {
 }
 
 void Color_mult(Color* result, const Color* a, const Color* b) {
-    result->r = a->r * b->r;
-    result->g = a->g * b->g;
-    result->b = a->b * b->b;
+    result->r = CLAMP(0, (a->r * b->r) / 255, 255);
+    result->g = CLAMP(0, (a->g * b->g) / 255, 255);
+    result->b = CLAMP(0, (a->b * b->b) / 255, 255);
 }
 
 bool Color_is_black(const Color* c) {
