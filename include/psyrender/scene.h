@@ -6,8 +6,8 @@
 #define _PSY_SCENE_H
 
 struct Scene_struct {
-    List* objects;
-    //List* lights;
+    ObjectArray* objects;
+    //LightArray* lights;
 };
 
 /**

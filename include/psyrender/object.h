@@ -22,6 +22,9 @@ struct Object_struct {
 
 };
 
+// Create ObjectArray type
+PTRARRAY_MAKE_HEADER(ObjectArray, Object)
+
 /**
  * Return a new object with the given shape, material and volume.
  */

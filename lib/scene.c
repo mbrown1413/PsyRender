@@ -6,12 +6,12 @@
 
 Scene* Scene_new() {
     Scene* s = (Scene*) malloc(sizeof(Scene));
-    s->objects = List_new();
+    s->objects = ObjectArray_new();
     return s;
 }
 
 void Scene_add_object(Scene* scene, Object* obj) {
-    List_append(scene->objects, (void*) obj);
+    ObjectArray_append(scene->objects, obj);
 }
 
 bool Scene_ray_intersect(const Scene* scene, const Ray* r, SurfacePoint* sp_out) {
@@ -19,9 +19,8 @@ bool Scene_ray_intersect(const Scene* scene, const Ray* r, SurfacePoint* sp_out)
     double dist_sq, closest_dist_sq = INFINITY;
     bool found_intersection = false;
 
-    ListNode* node = scene->objects->head;
-    while(node) {
-        Object* obj = (Object*) node->data;
+    for(int i=0; i<scene->objects->len; i++) {
+        Object* obj = ObjectArray_GET(scene->objects, i);
 
         if(Object_ray_intersect(obj, r, &sp)) {
 
@@ -29,7 +28,6 @@ bool Scene_ray_intersect(const Scene* scene, const Ray* r, SurfacePoint* sp_out)
 
             //TODO: Remove this when ray.min_t is implemented
             if(dist_sq < 10*EPSILON) {
-                node = node->next;
                 continue;
             }
 
@@ -42,7 +40,6 @@ bool Scene_ray_intersect(const Scene* scene, const Ray* r, SurfacePoint* sp_out)
 
         }
 
-        node = node->next;
     }
 
     if(found_intersection) {
@@ -55,17 +52,10 @@ bool Scene_ray_intersect(const Scene* scene, const Ray* r, SurfacePoint* sp_out)
     }
 }
 
-void Scene_free(Scene* s) {
-    Object* obj;
-
-    ListNode* node = s->objects->head;
-    while(node) {
-        obj = (Object*) node->data;
-        Object_free(obj);
-        node = node->next;
+void Scene_free(Scene* scene) {
+    for(int i=0; i<scene->objects->len; i++) {
+        Object_free(ObjectArray_GET(scene->objects, i));
     }
-
-    List_free(s->objects);
-
-    free(s);
+    ObjectArray_free(scene->objects);
+    free(scene);
 }
