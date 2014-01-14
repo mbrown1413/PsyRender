@@ -7,4 +7,7 @@ typedef struct {
     Color color;
 } Photon;
 
+// Make PhotonArray type
+PTRARRAY_MAKE_HEADER(PhotonArray, Photon)
+
 #endif

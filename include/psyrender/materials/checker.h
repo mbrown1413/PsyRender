@@ -14,15 +14,15 @@ Color Material_Checker_direction_scatter(const Material* mat,
                                          const SurfacePoint* sp,
                                          const Photon* in,
                                          const Ray* out);
-//PhotonList* Material_Checker_special_scatter(const Material* mat,
-//                                             const SurfacePoint* sp,
-//                                             const Photon* in);
+PhotonArray* Material_Checker_special_scatter(const Material* mat,
+                                             const SurfacePoint* sp,
+                                             const Photon* in);
 void Material_Checker_free(Material* mat);
 void Material_Checker_free_with_tiles(Material* mat);
 
 static const struct material_func_table material_checker_func_table = {
     Material_Checker_direction_scatter,
-    //Material_Checker_special_scatter,
+    Material_Checker_special_scatter,
     Material_Checker_free
 };
 

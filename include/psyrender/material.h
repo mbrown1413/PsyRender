@@ -10,13 +10,13 @@ struct material_func_table {
                                const SurfacePoint* sp,
                                const Photon* in,
                                const Ray* out);
-    //PhotonList* (*Material_special_scatter)(const Material* mat,
-    //                                        const SurfacePoint* sp,
-    //                                        const Photon* in);
+    PhotonArray* (*special_scatter)(const Material* mat,
+                                    const SurfacePoint* sp,
+                                    const Photon* in);
     //TODO: Implement random material sampling
-    //Photon (*Material_random_scatter)(const Material* mat,
-    //                                  const SurfacePoint* sp,
-    //                                  const Photon* in);
+    //Photon (*random_scatter)(const Material* mat,
+    //                         const SurfacePoint* sp,
+    //                         const Photon* in);
     void (*free)(Material* mat);
 };
 
@@ -49,10 +49,10 @@ struct Material_struct {
  *
  * The surface point of the scattering is given as ``sp``. The incoming
  * direction and color of the photon is given as ``in``. The returned
- * PhotonList must be free'd by the caller, along with the underlying
+ * PhotonArray must be free'd by the caller, along with the underlying
  * photon storage in the list.
  */
-//#define Material_special_scatter(m, ...) INTERFACE_CALL_FURC(Material, special_scatter, m, __VA_ARGS__)
+#define Material_special_scatter(m, ...) INTERFACE_CALL_FUNC(Material, special_scatter, m, __VA_ARGS__)
 
 /**
  * Get a single random photon scattering given a random incoming photon.
@@ -62,7 +62,7 @@ struct Material_struct {
  * photon should be pointing in a random direction in accordance with the
  * material's probability distribution function.
  */
-//#define Material_random_scatter(m, ...) INTERFACE_CALL_FURC(Material, random_scatter, m, __VA_ARGS__)
+//#define Material_random_scatter(m, ...) INTERFACE_CALL_FUNC(Material, random_scatter, m, __VA_ARGS__)
 
 #define Material_free(m) INTERFACE_CALL_FUNC_NO_ARGS(Material, free, m)
 

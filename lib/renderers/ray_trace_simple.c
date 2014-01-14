@@ -35,7 +35,7 @@ bool Renderer_RayTraceSimple_render(Renderer* _renderer, Scene* scene, Camera* c
 
 static Color trace_ray(Renderer_RayTraceSimple* renderer, const Scene* scene, const Ray* _r, unsigned int depth, double n1) {
     SurfacePoint sp;
-    Color result = (Color) {0, 0, 0};
+    Color tmp_color, result = (Color) {0, 0, 0};
     Ray r;
     Photon p;
 
@@ -58,10 +58,21 @@ static Color trace_ray(Renderer_RayTraceSimple* renderer, const Scene* scene, co
     } else {
         p.color = (Color) {0, 0, 0};
     }
-
     p.ray.o = (Vector) {DBL_MAX, 0, DBL_MAX};
     Vector_scalar_mult(&p.ray.d, &p.ray.d, -1);
     result = Material_direction_scatter(sp.obj->mat, &sp, &p, &r);
+
+    // Special rays (reflection and refraction)
+    p.ray = r;
+    p.color = (Color) {255, 255, 255};
+    PhotonArray* photons = Material_special_scatter(sp.obj->mat, &sp, &p);
+    for(int i=0; i<photons->len; i++) {
+        Photon* photon_p = PhotonArray_GET(photons, i);
+        tmp_color = trace_ray(renderer, scene, &photon_p->ray, depth+1, n1);
+        Color_mult(&tmp_color, &tmp_color, &photon_p->color);
+        Color_add(&result, &result, &tmp_color);
+        free(photon_p);
+    }
 
     return result;
 }

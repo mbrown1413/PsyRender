@@ -4,6 +4,10 @@
 
 #include "psyrender.h"
 
+// Private Prototypes
+Material* Material_Checker_get_active(const Material_Checker* m, const SurfacePoint* sp);
+
+
 Material* Material_Checker_new(unsigned int scale, Material* tile1, Material* tile2) {
     Material_Checker* m = (Material_Checker*) malloc(sizeof(Material_Checker));
     m->func = material_checker_func_table;
@@ -13,23 +17,32 @@ Material* Material_Checker_new(unsigned int scale, Material* tile1, Material* ti
     return (Material*) m;
 }
 
+Material* Material_Checker_get_active(const Material_Checker* m, const SurfacePoint* sp) {
+    if (( ((int) round(sp->point.x)) / m->scale + \
+          ((int) round(sp->point.y)) / m->scale + \
+          ((int) round(sp->point.z)) / m->scale) % 2)
+    {
+        return m->tile1;
+    } else {
+        return m->tile2;
+    }
+}
+
 Color Material_Checker_direction_scatter(const Material* _mat,
                                          const SurfacePoint* sp,
                                          const Photon* in,
                                          const Ray* out) {
     const Material_Checker* mat = (const Material_Checker*) _mat;
-
-    const Material* active_mat;
-    if (( ((int) round(sp->point.x)) / mat->scale + \
-          ((int) round(sp->point.y)) / mat->scale + \
-          ((int) round(sp->point.z)) / mat->scale) % 2)
-    {
-        active_mat = mat->tile1;
-    } else {
-        active_mat = mat->tile2;
-    }
-
+    const Material* active_mat = Material_Checker_get_active(mat, sp);
     return Material_direction_scatter(active_mat, sp, in, out);
+}
+
+PhotonArray* Material_Checker_special_scatter(const Material* _mat,
+                                             const SurfacePoint* sp,
+                                             const Photon* in) {
+    const Material_Checker* mat = (const Material_Checker*) _mat;
+    const Material* active_mat = Material_Checker_get_active(mat, sp);
+    return Material_special_scatter(active_mat, sp, in);
 }
 
 void Material_Checker_free(Material* mat) {

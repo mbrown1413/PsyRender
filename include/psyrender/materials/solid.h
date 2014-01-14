@@ -21,14 +21,14 @@ Color Material_Solid_direction_scatter(const Material* mat,
                                        const SurfacePoint* sp,
                                        const Photon* in,
                                        const Ray* out);
-//PhotonList* Material_Solid_special_scatter(const Material* mat,
-//                                           const SurfacePoint* sp,
-//                                           const Photon* in);
+PhotonArray* Material_Solid_special_scatter(const Material* mat,
+                                           const SurfacePoint* sp,
+                                           const Photon* in);
 void Material_Solid_free(Material* mat);
 
 static const struct material_func_table material_solid_func_table = {
     Material_Solid_direction_scatter,
-    //Material_Solid_special_scatter,
+    Material_Solid_special_scatter,
     Material_Solid_free
 };
 
