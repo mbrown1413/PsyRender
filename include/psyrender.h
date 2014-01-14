@@ -40,7 +40,7 @@ typedef struct Volume_struct Volume;
 #include "psyrender/data_structs/vector.h"
 #include "psyrender/data_structs/point.h"
 #include "psyrender/data_structs/ray.h"
-#include "psyrender/data_structs/ptrarray.h"
+#include "psyrender/data_structs/ptrlist.h"
 #include "psyrender/data_structs/color.h"
 #include "psyrender/data_structs/matrix4x4.h"
 #include "psyrender/data_structs/transform.h"

@@ -65,9 +65,9 @@ static Color trace_ray(Renderer_RayTraceSimple* renderer, const Scene* scene, co
     // Special rays (reflection and refraction)
     p.ray = r;
     p.color = (Color) {255, 255, 255};
-    PhotonArray* photons = Material_special_scatter(sp.obj->mat, &sp, &p);
+    PhotonList* photons = Material_special_scatter(sp.obj->mat, &sp, &p);
     for(int i=0; i<photons->len; i++) {
-        Photon* photon_p = PhotonArray_GET(photons, i);
+        Photon* photon_p = PhotonList_GET(photons, i);
         tmp_color = trace_ray(renderer, scene, &photon_p->ray, depth+1, n1);
         Color_mult(&tmp_color, &tmp_color, &photon_p->color);
         Color_add(&result, &result, &tmp_color);

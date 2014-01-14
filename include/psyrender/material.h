@@ -10,9 +10,9 @@ struct material_func_table {
                                const SurfacePoint* sp,
                                const Photon* in,
                                const Ray* out);
-    PhotonArray* (*special_scatter)(const Material* mat,
-                                    const SurfacePoint* sp,
-                                    const Photon* in);
+    PhotonList* (*special_scatter)(const Material* mat,
+                                   const SurfacePoint* sp,
+                                   const Photon* in);
     //TODO: Implement random material sampling
     //Photon (*random_scatter)(const Material* mat,
     //                         const SurfacePoint* sp,
@@ -49,7 +49,7 @@ struct Material_struct {
  *
  * The surface point of the scattering is given as ``sp``. The incoming
  * direction and color of the photon is given as ``in``. The returned
- * PhotonArray must be free'd by the caller, along with the underlying
+ * PhotonList must be free'd by the caller, along with the underlying
  * photon storage in the list.
  */
 #define Material_special_scatter(m, ...) INTERFACE_CALL_FUNC(Material, special_scatter, m, __VA_ARGS__)

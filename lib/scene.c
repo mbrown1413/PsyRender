@@ -6,12 +6,12 @@
 
 Scene* Scene_new() {
     Scene* s = (Scene*) malloc(sizeof(Scene));
-    s->objects = ObjectArray_new();
+    s->objects = ObjectList_new();
     return s;
 }
 
 void Scene_add_object(Scene* scene, Object* obj) {
-    ObjectArray_append(scene->objects, obj);
+    ObjectList_append(scene->objects, obj);
 }
 
 bool Scene_ray_intersect(const Scene* scene, const Ray* r, SurfacePoint* sp_out) {
@@ -20,7 +20,7 @@ bool Scene_ray_intersect(const Scene* scene, const Ray* r, SurfacePoint* sp_out)
     bool found_intersection = false;
 
     for(int i=0; i<scene->objects->len; i++) {
-        Object* obj = ObjectArray_GET(scene->objects, i);
+        Object* obj = ObjectList_GET(scene->objects, i);
 
         if(Object_ray_intersect(obj, r, &sp)) {
 
@@ -54,8 +54,8 @@ bool Scene_ray_intersect(const Scene* scene, const Ray* r, SurfacePoint* sp_out)
 
 void Scene_free(Scene* scene) {
     for(int i=0; i<scene->objects->len; i++) {
-        Object_free(ObjectArray_GET(scene->objects, i));
+        Object_free(ObjectList_GET(scene->objects, i));
     }
-    ObjectArray_free(scene->objects);
+    ObjectList_free(scene->objects);
     free(scene);
 }

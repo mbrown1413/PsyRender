@@ -21,7 +21,7 @@ Color Material_Solid_direction_scatter(const Material* mat,
                                        const SurfacePoint* sp,
                                        const Photon* in,
                                        const Ray* out);
-PhotonArray* Material_Solid_special_scatter(const Material* mat,
+PhotonList* Material_Solid_special_scatter(const Material* mat,
                                            const SurfacePoint* sp,
                                            const Photon* in);
 void Material_Solid_free(Material* mat);

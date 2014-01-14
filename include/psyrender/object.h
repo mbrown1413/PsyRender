@@ -22,8 +22,8 @@ struct Object_struct {
 
 };
 
-// Create ObjectArray type
-PTRARRAY_MAKE_HEADER(ObjectArray, Object)
+// Create ObjectList type
+PTRLIST_MAKE_HEADER(ObjectList, Object)
 
 /**
  * Return a new object with the given shape, material and volume.

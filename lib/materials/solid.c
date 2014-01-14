@@ -39,17 +39,17 @@ Color Material_Solid_direction_scatter(const Material* _mat,
     return result;
 }
 
-PhotonArray* Material_Solid_special_scatter(const Material* _mat,
+PhotonList* Material_Solid_special_scatter(const Material* _mat,
                                            const SurfacePoint* sp,
                                            const Photon* in) {
     const Material_Solid* mat = (const Material_Solid*) _mat;
-    PhotonArray* photons = PhotonArray_new();
+    PhotonList* photons = PhotonList_new();
 
     // Reflective
     Photon* p = (Photon*) malloc(sizeof(Photon));
     Ray_reflect(&p->ray, &in->ray, &sp->point, &sp->norm);
     Color_mult(&p->color, &in->color, &mat->reflect);
-    PhotonArray_append(photons, p);
+    PhotonList_append(photons, p);
 
     // Refractive
     //TODO

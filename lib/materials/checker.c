@@ -37,7 +37,7 @@ Color Material_Checker_direction_scatter(const Material* _mat,
     return Material_direction_scatter(active_mat, sp, in, out);
 }
 
-PhotonArray* Material_Checker_special_scatter(const Material* _mat,
+PhotonList* Material_Checker_special_scatter(const Material* _mat,
                                              const SurfacePoint* sp,
                                              const Photon* in) {
     const Material_Checker* mat = (const Material_Checker*) _mat;
