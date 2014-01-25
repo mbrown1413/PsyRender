@@ -7,7 +7,7 @@
 
 struct Scene_struct {
     ObjectList* objects;
-    //LightList* lights;
+    LightList* lights;
 };
 
 /**
@@ -19,6 +19,11 @@ Scene* Scene_new();
  * Adds an object to the scene.
  */
 void Scene_add_object(Scene* scene, Object* obj);
+
+/**
+ * Adds a light to the scene.
+ */
+void Scene_add_light(Scene* scene, Light* light);
 
 /**
  * Calculate the closest intersection of the ray in the scene.

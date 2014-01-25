@@ -36,6 +36,7 @@ typedef struct Camera_struct Camera;
 typedef struct Canvas_struct Canvas;
 typedef struct Scene_struct Scene;
 typedef struct Volume_struct Volume;
+typedef struct Light_struct Light;
 
 #include "psyrender/data_structs/vector.h"
 #include "psyrender/data_structs/point.h"
@@ -51,6 +52,7 @@ typedef struct Volume_struct Volume;
 #include "psyrender/volume.h"
 #include "psyrender/shape.h"
 #include "psyrender/object.h"
+#include "psyrender/light.h"
 #include "psyrender/camera.h"
 #include "psyrender/canvas.h"
 #include "psyrender/renderer.h"

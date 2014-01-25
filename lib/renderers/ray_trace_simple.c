@@ -49,18 +49,30 @@ static Color trace_ray(Renderer_RayTraceSimple* renderer, const Scene* scene, co
     Vector_normalize(&sp.norm);
 
     // Sample material in direction of lights
-    //TODO: One hardcoded light for now
-    p.ray.o = sp.point;
-    p.ray.d = (Vector) {1, 0, 1};
-    Vector_normalize(&p.ray.d);
-    if(!Scene_ray_intersect(scene, &p.ray, NULL)) {
-        p.color = (Color) {255, 255, 255};
-    } else {
-        p.color = (Color) {0, 0, 0};
+    for(int i=0; i<scene->lights->len; i++) {
+        Light* light = LightList_GET(scene->lights, i);
+        Photon light_photon = Light_sample(light, &sp.point);
+
+        // Setup p.ray to point towards light for shadow ray
+        p.ray.o = sp.point;
+        Vector_scalar_mult(&p.ray.d, &light_photon.ray.d, -1);
+        Vector_normalize(&p.ray.d);
+
+        // Shadow Ray
+        // Zero photon color if an object is blocking the light.
+        //
+        // The ray is not entirely ignored even if the shadow ray hits
+        // something. This allows for non realistic materials that add ambient
+        // light that does not depend on any light source.
+        if(Scene_ray_intersect(scene, &p.ray, NULL)) {
+            light_photon.color = (Color) {0, 0, 0};
+        }
+
+        // Add material's scatter when the photon hits it
+        tmp_color = Material_direction_scatter(sp.obj->mat, &sp, &light_photon, &r);
+        Color_add(&result, &result, &tmp_color);
+
     }
-    p.ray.o = (Vector) {DBL_MAX, 0, DBL_MAX};
-    Vector_scalar_mult(&p.ray.d, &p.ray.d, -1);
-    result = Material_direction_scatter(sp.obj->mat, &sp, &p, &r);
 
     // Special rays (reflection and refraction)
     p.ray = r;

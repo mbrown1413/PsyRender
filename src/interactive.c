@@ -119,6 +119,12 @@ int main(int argc, char* argv[]) {
 
     scene = Scene_new();
 
+    Light* light = Light_new(
+        (Point) {1e100, 0, 1e100},
+        (Color) {255, 255, 255}
+    );
+    Scene_add_light(scene, light);
+
     shape = Shape_Sphere_new(1);
     mat_solid = (Material_Solid*) Material_Solid_new(
         255 * 0.1,         0,         0,

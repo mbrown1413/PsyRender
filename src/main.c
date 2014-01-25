@@ -1,4 +1,5 @@
 
+#include <float.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -16,6 +17,12 @@ int main() {
     Object* sphere2;
     Object* sphere3;
     Object* plane;
+
+    Light* light = Light_new(
+        (Point) {1e100, 0, 1e100},
+        (Color) {255, 255, 255}
+    );
+    Scene_add_light(scene, light);
 
     shape = Shape_Sphere_new(1);
     mat_solid = (Material_Solid*) Material_Solid_new(

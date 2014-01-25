@@ -7,11 +7,16 @@
 Scene* Scene_new() {
     Scene* s = (Scene*) malloc(sizeof(Scene));
     s->objects = ObjectList_new();
+    s->lights = LightList_new();
     return s;
 }
 
 void Scene_add_object(Scene* scene, Object* obj) {
     ObjectList_append(scene->objects, obj);
+}
+
+void Scene_add_light(Scene* scene, Light* light) {
+    LightList_append(scene->lights, light);
 }
 
 bool Scene_ray_intersect(const Scene* scene, const Ray* r, SurfacePoint* sp_out) {
@@ -56,6 +61,11 @@ void Scene_free(Scene* scene) {
     for(int i=0; i<scene->objects->len; i++) {
         Object_free(ObjectList_GET(scene->objects, i));
     }
+    for(int i=0; i<scene->lights->len; i++) {
+        Light_free(LightList_GET(scene->objects, i));
+    }
     ObjectList_free(scene->objects);
+    LightList_free(scene->lights);
+
     free(scene);
 }
